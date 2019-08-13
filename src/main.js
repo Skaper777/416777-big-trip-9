@@ -6,6 +6,7 @@ import {renderTripDays} from './components/trip-days';
 import {renderDay} from './components/day';
 import {renderEditEvent} from './components/edit-form';
 import {renderEvent} from './components/event';
+import {getEvent} from './data';
 
 const infoContainer = document.querySelector(`.trip-main__trip-info`);
 const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
@@ -33,6 +34,7 @@ renderDays(1);
 
 const eventContainers = document.querySelectorAll(`.trip-events__list`);
 
+getEvent();
 renderComponent(eventContainers[0], renderEditEvent, `beforeend`);
 
 const renderEvents = (index, events) => {

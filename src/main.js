@@ -12,21 +12,30 @@ const infoContainer = document.querySelector(`.trip-main__trip-info`);
 const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripContainer = document.querySelector(`.trip-events`);
 
-const renderComponent = (container, render, place) => {
-  container.insertAdjacentHTML(place, render());
+const info = renderInfo();
+const menu = renderMenu();
+const filters = renderFilters();
+const sort = renderSort();
+const tripDays = renderTripDays();
+const day = renderDay();
+const editEvent = renderEditEvent(getEvent());
+const eventDay = renderEvent();
+
+const renderComponent = (container, markUp, place) => {
+  container.insertAdjacentHTML(place, markUp);
 };
 
-renderComponent(infoContainer, renderInfo, `afterBegin`);
-renderComponent(tripControlsContainer, renderMenu, `beforeend`);
-renderComponent(tripControlsContainer, renderFilters, `beforeend`);
-renderComponent(tripContainer, renderSort, `beforeend`);
-renderComponent(tripContainer, renderTripDays, `beforeend`);
+renderComponent(infoContainer, info, `afterBegin`);
+renderComponent(tripControlsContainer, menu, `beforeend`);
+renderComponent(tripControlsContainer, filters, `beforeend`);
+renderComponent(tripContainer, sort, `beforeend`);
+renderComponent(tripContainer, tripDays, `beforeend`);
 
 const daysContainer = document.querySelector(`.trip-days`);
 
 const renderDays = (days) => {
   for (let i = 0; i < days; i++) {
-    renderComponent(daysContainer, renderDay, `beforeend`);
+    renderComponent(daysContainer, day, `beforeend`);
   }
 };
 
@@ -34,12 +43,11 @@ renderDays(1);
 
 const eventContainers = document.querySelectorAll(`.trip-events__list`);
 
-getEvent();
-renderComponent(eventContainers[0], renderEditEvent, `beforeend`);
+renderComponent(eventContainers[0], editEvent, `beforeend`);
 
 const renderEvents = (index, events) => {
   for (let i = 0; i < events; i++) {
-    renderComponent(eventContainers[index], renderEvent, `beforeend`);
+    renderComponent(eventContainers[index], eventDay, `beforeend`);
   }
 };
 

@@ -1,4 +1,4 @@
-export const renderEditEvent = ({type, getTitle, city, dateIn, timeIn, dateOff, timeOff, description, photo}) => {
+export const renderEditEvent = ({type, getTitle, destination, time, description, photo}) => {
   return `
   <li class="trip-events__item">
   <form class="event  event--edit" action="#" method="post">
@@ -75,7 +75,7 @@ export const renderEditEvent = ({type, getTitle, city, dateIn, timeIn, dateOff, 
         <label class="event__label  event__type-output" for="event-destination-1">
           ${getTitle}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
@@ -87,12 +87,12 @@ export const renderEditEvent = ({type, getTitle, city, dateIn, timeIn, dateOff, 
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateIn} ${timeIn}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${time.formatDate(time.getRandomIn())}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateOff} ${timeOff}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${time.formatDate(time.getRandomOut())}">
       </div>
 
       <div class="event__field-group  event__field-group--price">

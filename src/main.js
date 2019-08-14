@@ -19,7 +19,6 @@ const sort = renderSort();
 const tripDays = renderTripDays();
 const day = renderDay();
 const editEvent = renderEditEvent(getEvent());
-const eventDay = renderEvent();
 
 const renderComponent = (container, markUp, place) => {
   container.insertAdjacentHTML(place, markUp);
@@ -47,6 +46,7 @@ renderComponent(eventContainers[0], editEvent, `beforeend`);
 
 const renderEvents = (index, events) => {
   for (let i = 0; i < events; i++) {
+    const eventDay = renderEvent(getEvent());
     renderComponent(eventContainers[index], eventDay, `beforeend`);
   }
 };

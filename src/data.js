@@ -125,7 +125,7 @@ export const getEvent = () => ({
     price: 15,
     check: true,
 
-    type: [
+    list: [
       {type: `Add luggage`, price: 10},
       {type: `Switch to comfort class`, price: 150},
       {type: `Add meal`, price: 2},

@@ -1,4 +1,4 @@
-export const renderEvent = ({type, getTitle, destination, time}) => {
+export const renderEvent = ({type, getTitle, destination, time, offer}) => {
   return `
   <li class="trip-events__item">
   <div class="event">
@@ -17,16 +17,12 @@ export const renderEvent = ({type, getTitle, destination, time}) => {
     </div>
 
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">20</span>
+      &euro;&nbsp;<span class="event__price-value">${offer.price}</span>
     </p>
 
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;
-        &euro;&nbsp;<span class="event__offer-price">20</span>
-       </li>
+      ${offer.renderOffers()}
     </ul>
 
     <button class="event__rollup-btn" type="button">

@@ -118,20 +118,57 @@ export const getEvent = () => ({
   },
 
   offer: {
-    name: [
-      `Add luggage`,
-      `Switch to comfort class`,
-      `Add meal`,
-      `Choose seats`
-    ][Math.floor(Math.random() * 2)],
-    price: [
-      30,
-      100,
-      15,
-      5
-    ],
-    check: true
+    price: 15,
+    check: true,
+    list: new Set(),
+    renderOffer() {
+      const name = [
+        `Add luggage`,
+        `Switch to comfort class`,
+        `Add meal`,
+        `Choose seats`
+      ][Math.floor(Math.random() * 4)];
+      const getPrice = () => {
+        switch (name) {
+          case `Add luggage`:
+            this.price += 30;
+            return 30;
+
+          case `Switch to comfort class`:
+            this.price += 100;
+            return 100;
+
+          case `Add meal`:
+            this.price += 15;
+            return 15;
+
+          case `Choose seats`:
+            this.price += 5;
+            return 5;
+
+          default:
+            return ``;
+        }
+      };
+      this.list.add(`
+        <li class="event__offer">
+          <span class="event__offer-title">${name}</span>
+          &plus;
+          &euro;&nbsp;<span class="event__offer-price">${getPrice()}</span>
+        </li>
+      `);
+    },
+
+    renderOffers() {
+      let offerCount = Math.floor(Math.random() * 2);
+
+      for (let i = 0; i <= offerCount; i++) {
+        this.renderOffer();
+      }
+
+      const arr = Array.from(this.list);
+
+      return arr.join(` `);
+    }
   },
 });
-
-// const getDays = () => [];

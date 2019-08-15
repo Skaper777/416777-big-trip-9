@@ -22,7 +22,13 @@ export const renderEvent = ({type, getTitle, destination, time, offer}) => {
 
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${offer.renderOffers()}
+    ${
+      offer.type.map((arr) =>
+      `<li class="event__offer"><span class="event__offer-title">${arr.type}</span>
+        &plus;
+        &euro;&nbsp;<span class="event__offer-price">${arr.price}</span>
+      </li>`).join(``)}
+
     </ul>
 
     <button class="event__rollup-btn" type="button">

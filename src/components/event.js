@@ -1,3 +1,6 @@
+import {getPriceSum} from '../utils';
+// import {getRandomElement} from '../utils';
+
 export const renderEvent = ({type, getTitle, destination, time, offer}) => {
   return `
   <li class="trip-events__item">
@@ -17,17 +20,17 @@ export const renderEvent = ({type, getTitle, destination, time, offer}) => {
     </div>
 
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">${offer.price}</span>
+      &euro;&nbsp;<span class="event__price-value">${getPriceSum(offer.randomList)}</span>
     </p>
 
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
     ${
-      offer.list.map((arr) =>
-      `<li class="event__offer"><span class="event__offer-title">${arr.type}</span>
-        &plus;
-        &euro;&nbsp;<span class="event__offer-price">${arr.price}</span>
-      </li>`).join(``)}
+  offer.randomList.map((arr) =>
+    `<li class="event__offer"><span class="event__offer-title">${arr.type}</span>
+      &plus;
+      &euro;&nbsp;<span class="event__offer-price">${arr.price}</span>
+    </li>`).join(``)}
 
     </ul>
 

@@ -1,3 +1,5 @@
+import {getRandomList} from './utils';
+
 export const getEvent = () => ({
   type: [
     `taxi`,
@@ -48,6 +50,7 @@ export const getEvent = () => ({
         return ``;
     }
   },
+
   destination: [
     `Saint-Petersburg`,
     `Moscow`,
@@ -93,7 +96,7 @@ export const getEvent = () => ({
     },
 
     date: Date.now(),
-    maxDate: 15000000,
+    maxDate: 20000000,
     hoursIn: ``,
     hoursOut: ``,
     durationHours: ``,
@@ -122,14 +125,26 @@ export const getEvent = () => ({
   },
 
   offer: {
-    price: 15,
-    check: true,
-
-    list: [
-      {type: `Add luggage`, price: 10},
-      {type: `Switch to comfort class`, price: 150},
-      {type: `Add meal`, price: 2},
-      {type: `Choose seats`, price: 9}
-    ],
+    randomList: getRandomList([
+      {type: `Add luggage`, price: 10, check: false},
+      {type: `Switch to comfort class`, price: 150, check: false},
+      {type: `Add meal`, price: 2, check: false},
+      {type: `Choose seats`, price: 9, check: false}
+    ], 2),
   },
+});
+
+export const getMenu = () => ({
+  list: [
+    {name: `Table`, active: true},
+    {name: `Stats`, active: false}
+  ]
+});
+
+export const getFilters = () => ({
+  list: [
+    {name: `Everything`, checked: true},
+    {name: `Future`, checked: false},
+    {name: `Past`, checked: false}
+  ]
 });

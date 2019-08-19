@@ -5,21 +5,29 @@ export const renderTripInfo = () => {
   <div class="trip-info__main">
     <h1 class="trip-info__title">${getTripCities(events)}</h1>
 
-    <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;21</p>
+    <p class="trip-info__dates">${getTripDate()}</p>
   </div>
   `;
 };
 
 export const renderTotalPrice = () => {
-  let sum = 0;
+  let sumEventsPrice = 0;
+  let sumOffers = 0;
 
   for (let i = 0; i < events.length; i++) {
-    events[i].offer.randomList.forEach((el) => {
-      sum += el.price;
+    let eventPrice = events[i].price;
+    sumEventsPrice += eventPrice;
+
+    events[i].offers.forEach((offer) => {
+      let offersPrice = offer.price;
+      sumOffers += offersPrice;
     });
   }
+  return sumEventsPrice + sumOffers;
+};
 
-  return sum;
+const formatInfo = (arr) => {
+  return arr.length > 2 ? `${arr[0]} — ... — ${arr[arr.length - 1]}` : arr.join(` — `);
 };
 
 const getTripCities = (arr) => {
@@ -30,11 +38,17 @@ const getTripCities = (arr) => {
     cities.push(city);
   }
 
-  let stringList = cities.length > 2 ? `${cities[0]} — ... — ${cities[cities.length - 1]}` : cities.join(` — `);
+  let stringList = formatInfo(cities);
 
   return stringList;
 };
 
 const getTripDate = () => {
-
+  let days = [];
+  let date = events[0].time.date;
+  let day = new Date(date).toString().split(` `);
+  let newDay = [day[1], day[2]].join(` `);
+  days.push(newDay);
+  let stringList = formatInfo(days);
+  return stringList;
 };

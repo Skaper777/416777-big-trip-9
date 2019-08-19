@@ -5,7 +5,7 @@ import {
   renderEvent
 } from './event';
 
-export const events = new Array(3).fill(``).map(getEvent).sort((a, b) => a - b);
+export const events = new Array(3).fill(``).map(getEvent).sort((a, b) => a.time.date - b.time.date);
 
 export const getPoints = (val) => {
   let points = [];

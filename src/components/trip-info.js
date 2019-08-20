@@ -1,14 +1,24 @@
 import {events} from './points';
 
-export const renderTripInfo = () => {
-  return `
-  <div class="trip-info__main">
-    <h1 class="trip-info__title">${getTripCities(events)}</h1>
+export class TripInfo {
+  constructor() {
+    this._element = null;
+  }
 
-    <p class="trip-info__dates">${getTripDate()}</p>
-  </div>
-  `;
-};
+  getElement() {
+
+  }
+
+  getTemplate() {
+    return `
+    <div class="trip-info__main">
+      <h1 class="trip-info__title">${getTripCities(events)}</h1>
+
+      <p class="trip-info__dates">${getTripDate()}</p>
+    </div>
+    `;
+  }
+}
 
 export const renderTotalPrice = () => {
   let sumEventsPrice = 0;

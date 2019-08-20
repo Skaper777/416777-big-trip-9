@@ -1,5 +1,14 @@
-export const renderSort = () => {
-  return `
+export class renderSort {
+  constructor() {
+    this._element = null;
+  }
+
+  getElement() {
+
+  }
+
+  getTemplate() {
+    return `
   <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   <span class="trip-sort__item  trip-sort__item--day">Day</span>
 
@@ -31,4 +40,5 @@ export const renderSort = () => {
   <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
 </form>
   `;
-};
+  }
+}

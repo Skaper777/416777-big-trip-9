@@ -12,14 +12,14 @@ export const getRandomList = (arr, value) => {
   return newList;
 };
 
-export const getPriceSum = (arr) => {
+/* export const getPriceSum = (arr) => {
   if (!arr.length) {
     return 0;
   }
   return arr.map((ar) => ar.price).reduce((sum, current) => {
     return sum + current;
   });
-};
+}; */
 
 export const getTime = (value) => {
   return (value < 10 ? `0` + value : value);

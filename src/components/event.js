@@ -1,5 +1,6 @@
 import {
-  formatTime
+  formatTime,
+  createElement
 } from '../utils';
 
 export class Event {
@@ -15,13 +16,14 @@ export class Event {
 
   getElement() {
     if (!this._element) {
-      this._element = ;
+      this._element = createElement(this.getTemplate());
     }
+
+    return this._element;
   }
 
   getTemplate() {
-    return `
-    <li class="trip-events__item">
+    return `<li class="trip-events__item">
     <div class="event">
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${this._type}.png" alt="Event type icon">

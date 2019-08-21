@@ -1,16 +1,21 @@
-export class renderFilters {
+import {createElement} from '../utils';
+
+export class Filters {
   constructor({list}) {
     this._list = list;
     this._element = null;
   }
 
   getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
 
+    return this._element;
   }
 
   getTemplate() {
-    return `
-    <form class="trip-filters" action="#" method="get">
+    return `<form class="trip-filters" action="#" method="get">
     ${this._list.map((item) =>
     `
       <div class="trip-filters__filter">

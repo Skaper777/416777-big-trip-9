@@ -1,3 +1,5 @@
+import {events} from './components/points';
+
 export const getRandomValue = (min, max) => {
   return Math.round((Math.random() * (max - min)) + min);
 };
@@ -11,15 +13,6 @@ export const getRandomList = (arr, value) => {
   newList.length = Math.round(Math.random() * value);
   return newList;
 };
-
-/* export const getPriceSum = (arr) => {
-  if (!arr.length) {
-    return 0;
-  }
-  return arr.map((ar) => ar.price).reduce((sum, current) => {
-    return sum + current;
-  });
-}; */
 
 export const getTime = (value) => {
   return (value < 10 ? `0` + value : value);
@@ -48,4 +41,55 @@ export const formatTime = (data) => {
   const time = [getTime(data.getHours()), getTime(data.getMinutes())];
 
   return `${time.join(`:`)}`;
+};
+
+export const renderTotalPrice = () => {
+  let sumEventsPrice = 0;
+  let sumOffers = 0;
+
+  for (let i = 0; i < events.length; i++) {
+    let eventPrice = events[i].price;
+    sumEventsPrice += eventPrice;
+
+    events[i].offers.forEach((offer) => {
+      let offersPrice = offer.price;
+      sumOffers += offersPrice;
+    });
+  }
+  return sumEventsPrice + sumOffers;
+};
+
+export const position = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+  return newElement.firstChild;
+};
+
+export const removeElement = (targ) => {
+  if (targ._element) {
+    targ._element = null;
+  }
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case position.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case position.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+export const unrender = (element) => {
+  if (element) {
+    element.remove();
+    removeElement(element);
+  }
 };

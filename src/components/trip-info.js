@@ -1,4 +1,5 @@
 import {events} from './points';
+import {createElement} from '../utils';
 
 export class TripInfo {
   constructor() {
@@ -6,12 +7,15 @@ export class TripInfo {
   }
 
   getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
 
+    return this._element;
   }
 
   getTemplate() {
-    return `
-    <div class="trip-info__main">
+    return `<div class="trip-info__main">
       <h1 class="trip-info__title">${getTripCities(events)}</h1>
 
       <p class="trip-info__dates">${getTripDate()}</p>
@@ -19,22 +23,6 @@ export class TripInfo {
     `;
   }
 }
-
-export const renderTotalPrice = () => {
-  let sumEventsPrice = 0;
-  let sumOffers = 0;
-
-  for (let i = 0; i < events.length; i++) {
-    let eventPrice = events[i].price;
-    sumEventsPrice += eventPrice;
-
-    events[i].offers.forEach((offer) => {
-      let offersPrice = offer.price;
-      sumOffers += offersPrice;
-    });
-  }
-  return sumEventsPrice + sumOffers;
-};
 
 const formatInfo = (arr) => {
   return arr.length > 2 ? `${arr[0]} — ... — ${arr[arr.length - 1]}` : arr.join(` — `);

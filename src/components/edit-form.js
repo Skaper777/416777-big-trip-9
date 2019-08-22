@@ -1,6 +1,6 @@
 import {formatDate, createElement} from '../utils';
 
-export class editEvent {
+export class EditEvent {
   constructor({type, getTitle, destination, time, description, photo}) {
     this._type = type;
     this._getTitle = getTitle;
@@ -20,8 +20,7 @@ export class editEvent {
   }
 
   getTemplate() {
-    return `
-  <li class="trip-events__item">
+    return `<li class="trip-events__item">
   <form class="event  event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">

@@ -3,7 +3,7 @@ import {
   createElement
 } from '../utils';
 
-export class Event {
+export class Point {
   constructor({type, getTitle, destination, time, price, offers}) {
     this._type = type;
     this._getTitle = getTitle;

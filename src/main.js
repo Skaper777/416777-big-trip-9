@@ -5,9 +5,9 @@ import {TotalPrice} from './components/total-price';
 import {Sort} from './components/sort';
 import {TripDays} from './components/trip-days';
 import {Day} from './components/day';
+import {Point} from './components/event';
 import {EditEvent} from './components/edit-form';
 import {getMenu, getFilters} from './data';
-import {getPoints} from './components/points';
 import {render, position} from './utils';
 import {events} from './components/points';
 
@@ -61,9 +61,38 @@ const renderDay = () => {
 };
 
 const renderEvent = (mock) => {
-  const event = new Event(mock);
+  const point = new Point(mock);
+  const editForm = new EditEvent(mock);
 
-  render(eventContainer, event.getElement(), position.BEFOREEND);
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      eventContainer.replaceChild(point.getElement(), editForm.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  point.getElement()
+    .querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, () => {
+      eventContainer.replaceChild(editForm.getElement(), point.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  editForm.getElement()
+    .querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, () => {
+      eventContainer.replaceChild(point.getElement(), editForm.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  editForm.getElement()
+    .querySelector(`form`)
+    .addEventListener(`submit`, () => {
+      eventContainer.replaceChild(point.getElement(), editForm.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  render(eventContainer, point.getElement(), position.AFTERBEGIN);
 };
 
 renderTripInfo();
@@ -74,7 +103,9 @@ renderSort();
 renderTripDays();
 
 const daysContainer = document.querySelector(`.trip-days`);
-const eventContainer = document.querySelector(`.trip-events__list`);
 
 renderDay();
+
+const eventContainer = document.querySelector(`.trip-events__list`);
+
 events.forEach((mock) => renderEvent(mock));

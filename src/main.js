@@ -10,6 +10,7 @@ import {EditEvent} from './components/edit-form';
 import {getMenu, getFilters} from './data';
 import {render, position} from './utils';
 import {events} from './components/points';
+import {EventMessage} from './components/event-message';
 
 const infoContainer = document.querySelector(`.trip-main__trip-info`);
 const menuContainer = document.querySelector(`.trip-main__trip-controls`);
@@ -95,6 +96,12 @@ const renderEvent = (mock) => {
   render(eventContainer, point.getElement(), position.AFTERBEGIN);
 };
 
+const renderEventMessage = () => {
+  const message = new EventMessage();
+
+  render(tripContainer, message.getElement(), position.AFTERBEGIN);
+}
+
 renderTripInfo();
 renderMenu(getMenu());
 renderFilters(getFilters());
@@ -109,3 +116,7 @@ renderDay();
 const eventContainer = document.querySelector(`.trip-events__list`);
 
 events.forEach((mock) => renderEvent(mock));
+
+if (!tripContainer.contains(daysContainer)) {
+  renderEventMessage();
+}

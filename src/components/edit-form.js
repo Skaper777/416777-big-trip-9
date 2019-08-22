@@ -1,14 +1,32 @@
-import {formatDate} from '../utils';
+import {formatDate, createElement} from '../utils';
 
-export const renderEditEvent = ({type, getTitle, destination, time, description, photo}) => {
-  return `
-  <li class="trip-events__item">
+export class EditEvent {
+  constructor({type, getTitle, destination, time, description, photo}) {
+    this._type = type;
+    this._getTitle = getTitle;
+    this._destination = destination;
+    this._time = time;
+    this._description = description;
+    this._photo = photo;
+    this._element = null;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  getTemplate() {
+    return `<li class="trip-events__item">
   <form class="event  event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._type}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -75,9 +93,9 @@ export const renderEditEvent = ({type, getTitle, destination, time, description,
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-        ${getTitle}
+        ${this._getTitle}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination}" list="destination-list-1">
+        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._destination}" list="destination-list-1">
         <datalist id="destination-list-1">
           <option value="Amsterdam"></option>
           <option value="Geneva"></option>
@@ -89,12 +107,12 @@ export const renderEditEvent = ({type, getTitle, destination, time, description,
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(time.getRandomIn())}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(this._time.getRandomIn())}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(time.getRandomOut())}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(this._time.getRandomOut())}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -176,15 +194,15 @@ export const renderEditEvent = ({type, getTitle, destination, time, description,
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description.slice(0, Math.ceil(Math.random() * 3))}</p>
+        <p class="event__destination-description">${this._description.slice(0, Math.ceil(Math.random() * 3))}</p>
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            <img class="event__photo" src="${photo()}" alt="Event photo">
-            <img class="event__photo" src="${photo()}" alt="Event photo">
-            <img class="event__photo" src="${photo()}" alt="Event photo">
-            <img class="event__photo" src="${photo()}" alt="Event photo">
-            <img class="event__photo" src="${photo()}" alt="Event photo">
+            <img class="event__photo" src="${this._photo()}" alt="Event photo">
+            <img class="event__photo" src="${this._photo()}" alt="Event photo">
+            <img class="event__photo" src="${this._photo()}" alt="Event photo">
+            <img class="event__photo" src="${this._photo()}" alt="Event photo">
+            <img class="event__photo" src="${this._photo()}" alt="Event photo">
           </div>
         </div>
       </section>
@@ -192,4 +210,5 @@ export const renderEditEvent = ({type, getTitle, destination, time, description,
   </form>
 </li>
   `;
-};
+  }
+}

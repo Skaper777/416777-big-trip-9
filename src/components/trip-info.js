@@ -1,30 +1,28 @@
 import {events} from './points';
+import {createElement} from '../utils';
 
-export const renderTripInfo = () => {
-  return `
-  <div class="trip-info__main">
-    <h1 class="trip-info__title">${getTripCities(events)}</h1>
-
-    <p class="trip-info__dates">${getTripDate()}</p>
-  </div>
-  `;
-};
-
-export const renderTotalPrice = () => {
-  let sumEventsPrice = 0;
-  let sumOffers = 0;
-
-  for (let i = 0; i < events.length; i++) {
-    let eventPrice = events[i].price;
-    sumEventsPrice += eventPrice;
-
-    events[i].offers.forEach((offer) => {
-      let offersPrice = offer.price;
-      sumOffers += offersPrice;
-    });
+export class TripInfo {
+  constructor() {
+    this._element = null;
   }
-  return sumEventsPrice + sumOffers;
-};
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  getTemplate() {
+    return `<div class="trip-info__main">
+      <h1 class="trip-info__title">${getTripCities(events)}</h1>
+
+      <p class="trip-info__dates">${getTripDate()}</p>
+    </div>
+    `;
+  }
+}
 
 const formatInfo = (arr) => {
   return arr.length > 2 ? `${arr[0]} — ... — ${arr[arr.length - 1]}` : arr.join(` — `);

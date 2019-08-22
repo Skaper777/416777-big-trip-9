@@ -1,52 +1,111 @@
-import {renderTripInfo, renderTotalPrice} from './components/trip-info';
-import {renderMenu} from './components/menu';
-import {renderFilters} from './components/filters';
-import {renderSort} from './components/sort';
-import {renderTripDays} from './components/trip-days';
-import {renderDay} from './components/day';
-import {renderEditEvent} from './components/edit-form';
-import {getEvent, getMenu, getFilters} from './data';
-import {getPoints} from './components/points';
+import {TripInfo} from './components/trip-info';
+import {Menu} from './components/menu';
+import {Filters} from './components/filters';
+import {TotalPrice} from './components/total-price';
+import {Sort} from './components/sort';
+import {TripDays} from './components/trip-days';
+import {Day} from './components/day';
+import {Point} from './components/event';
+import {EditEvent} from './components/edit-form';
+import {getMenu, getFilters} from './data';
+import {render, position} from './utils';
+import {events} from './components/points';
 
 const infoContainer = document.querySelector(`.trip-main__trip-info`);
-const tripControlsContainer = document.querySelector(`.trip-main__trip-controls`);
+const menuContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripContainer = document.querySelector(`.trip-events`);
 const priceContainer = document.querySelector(`.trip-info__cost-value`);
 
-const info = renderTripInfo();
-const menu = renderMenu(getMenu());
-const filters = renderFilters(getFilters());
-const sort = renderSort();
-const tripDays = renderTripDays();
-const day = renderDay();
-const editEvent = renderEditEvent(getEvent());
-const points = getPoints(3);
-const totalPrice = renderTotalPrice();
 
-const renderComponent = (container, markUp, place) => {
-  container.insertAdjacentHTML(place, markUp);
+const renderTripInfo = () => {
+  const tripInfo = new TripInfo();
+
+  render(infoContainer, tripInfo.getElement(), position.AFTERBEGIN);
 };
 
-priceContainer.innerHTML = ``;
+const renderTotalPrice = () => {
+  const price = new TotalPrice();
+  priceContainer.innerHTML = ``;
 
-renderComponent(infoContainer, info, `afterBegin`);
-renderComponent(priceContainer, totalPrice, `afterBegin`);
-renderComponent(tripControlsContainer, menu, `beforeend`);
-renderComponent(tripControlsContainer, filters, `beforeend`);
-renderComponent(tripContainer, sort, `beforeend`);
-renderComponent(tripContainer, tripDays, `beforeend`);
+  render(priceContainer, price.getElement(), position.AFTERBEGIN);
+};
+
+const renderMenu = (mock) => {
+  const menu = new Menu(mock);
+
+  render(menuContainer, menu.getElement(), position.AFTERBEGIN);
+};
+
+const renderFilters = (mock) => {
+  const filters = new Filters(mock);
+
+  render(menuContainer, filters.getElement(), position.BEFOREEND);
+};
+
+const renderSort = () => {
+  const sort = new Sort();
+
+  render(tripContainer, sort.getElement(), position.AFTERBEGIN);
+};
+
+const renderTripDays = () => {
+  const tripDays = new TripDays();
+
+  render(tripContainer, tripDays.getElement(), position.BEFOREEND);
+};
+
+const renderDay = () => {
+  const day = new Day();
+
+  render(daysContainer, day.getElement(), position.BEFOREEND);
+};
+
+const renderEvent = (mock) => {
+  const point = new Point(mock);
+  const editForm = new EditEvent(mock);
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      eventContainer.replaceChild(point.getElement(), editForm.getElement());
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  point.getElement()
+    .querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, () => {
+      eventContainer.replaceChild(editForm.getElement(), point.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  editForm.getElement()
+    .querySelector(`.event__rollup-btn`)
+    .addEventListener(`click`, () => {
+      eventContainer.replaceChild(point.getElement(), editForm.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  editForm.getElement()
+    .querySelector(`form`)
+    .addEventListener(`submit`, () => {
+      eventContainer.replaceChild(point.getElement(), editForm.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
+
+  render(eventContainer, point.getElement(), position.AFTERBEGIN);
+};
+
+renderTripInfo();
+renderMenu(getMenu());
+renderFilters(getFilters());
+renderTotalPrice();
+renderSort();
+renderTripDays();
 
 const daysContainer = document.querySelector(`.trip-days`);
 
-const renderDays = (days) => {
-  for (let i = 0; i < days; i++) {
-    renderComponent(daysContainer, day, `beforeend`);
-  }
-};
+renderDay();
 
-renderDays(1);
+const eventContainer = document.querySelector(`.trip-events__list`);
 
-const eventContainers = document.querySelectorAll(`.trip-events__list`);
-
-renderComponent(eventContainers[0], editEvent, `beforeend`);
-renderComponent(eventContainers[0], points, `beforeend`);
+events.forEach((mock) => renderEvent(mock));

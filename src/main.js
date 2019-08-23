@@ -3,14 +3,10 @@ import {Menu} from './components/menu';
 import {Filters} from './components/filters';
 import {TotalPrice} from './components/total-price';
 import {Sort} from './components/sort';
-import {TripDays} from './components/trip-days';
-import {Day} from './components/day';
-import {Point} from './components/event';
-import {EditEvent} from './components/edit-form';
 import {getMenu, getFilters} from './data';
 import {render, position} from './utils';
 import {events} from './components/points';
-import {EventMessage} from './components/event-message';
+import {TripController} from './components/trip-controller';
 
 const infoContainer = document.querySelector(`.trip-main__trip-info`);
 const menuContainer = document.querySelector(`.trip-main__trip-controls`);
@@ -49,74 +45,14 @@ const renderSort = () => {
   render(tripContainer, sort.getElement(), position.AFTERBEGIN);
 };
 
-const renderTripDays = () => {
-  const tripDays = new TripDays();
-
-  render(tripContainer, tripDays.getElement(), position.BEFOREEND);
-};
-
-const renderDay = () => {
-  const day = new Day();
-
-  render(daysContainer, day.getElement(), position.BEFOREEND);
-};
-
-const renderEvent = (mock) => {
-  const point = new Point(mock);
-  const editForm = new EditEvent(mock);
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      eventContainer.replaceChild(point.getElement(), editForm.getElement());
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
-
-  point.getElement()
-    .querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, () => {
-      eventContainer.replaceChild(editForm.getElement(), point.getElement());
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-  editForm.getElement()
-    .querySelector(`.event__rollup-btn`)
-    .addEventListener(`click`, () => {
-      eventContainer.replaceChild(point.getElement(), editForm.getElement());
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-  editForm.getElement()
-    .querySelector(`form`)
-    .addEventListener(`submit`, () => {
-      eventContainer.replaceChild(point.getElement(), editForm.getElement());
-      document.addEventListener(`keydown`, onEscKeyDown);
-    });
-
-  render(eventContainer, point.getElement(), position.AFTERBEGIN);
-};
-
-const renderEventMessage = () => {
-  const message = new EventMessage();
-
-  render(tripContainer, message.getElement(), position.AFTERBEGIN);
-}
-
 renderTripInfo();
 renderMenu(getMenu());
 renderFilters(getFilters());
 renderTotalPrice();
 renderSort();
-renderTripDays();
 
-const daysContainer = document.querySelector(`.trip-days`);
 
-renderDay();
+const tripController = new TripController(tripContainer, events);
 
-const eventContainer = document.querySelector(`.trip-events__list`);
+tripController.init();
 
-events.forEach((mock) => renderEvent(mock));
-
-if (!tripContainer.contains(daysContainer)) {
-  renderEventMessage();
-}

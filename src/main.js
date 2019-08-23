@@ -51,7 +51,6 @@ renderFilters(getFilters());
 renderTotalPrice();
 renderSort();
 
-
 const tripController = new TripController(tripContainer, events);
 
 tripController.init();

@@ -1,9 +1,9 @@
 import {TripDays} from './trip-days';
 import {Day} from './day';
 import {render, position} from '../utils';
-import {Point} from './components/event';
-import {EditEvent} from './components/edit-form';
-import {EventMessage} from './components/event-message';
+import {Point} from './event';
+import {EditEvent} from './edit-form';
+import {EventMessage} from './event-message';
 
 export class TripController {
   constructor(container, events) {
@@ -14,8 +14,8 @@ export class TripController {
   }
 
   init() {
-    render(this._container, this._tripDays.getElement(), position.AFTERBEGIN);
-    render(this._tripDays.getElement(), this._Day.getElement(), position.AFTERBEGIN);
+    render(this._container, this._tripDays.getElement(), position.BEFOREEND);
+    render(this._tripDays.getElement(), this._day.getElement(), position.AFTERBEGIN);
 
     this._events.forEach((mock) => this._renderEvent(mock));
 

@@ -1,22 +1,15 @@
-import {formatDate, createElement} from '../utils';
+import {formatDate} from '../utils';
+import {AbstractComponent} from './abstract';
 
-export class EditEvent {
+export class EditEvent extends AbstractComponent {
   constructor({type, getTitle, destination, time, description, photo}) {
+    super();
     this._type = type;
     this._getTitle = getTitle;
     this._destination = destination;
     this._time = time;
     this._description = description;
     this._photo = photo;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {

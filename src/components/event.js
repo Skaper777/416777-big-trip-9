@@ -1,25 +1,15 @@
-import {
-  formatTime,
-  createElement
-} from '../utils';
+import {formatTime} from '../utils';
+import {AbstractComponent} from './abstract';
 
-export class Point {
+export class Point extends AbstractComponent {
   constructor({type, getTitle, destination, time, price, offers}) {
+    super();
     this._type = type;
     this._getTitle = getTitle;
     this._destination = destination;
     this._time = time;
     this._price = price;
     this._offers = offers;
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {

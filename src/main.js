@@ -2,7 +2,6 @@ import {TripInfo} from './components/trip-info';
 import {Menu} from './components/menu';
 import {Filters} from './components/filters';
 import {TotalPrice} from './components/total-price';
-import {Sort} from './components/sort';
 import {getMenu, getFilters} from './data';
 import {render, position} from './utils';
 import {events} from './components/points';
@@ -39,19 +38,15 @@ const renderFilters = (mock) => {
   render(menuContainer, filters.getElement(), position.BEFOREEND);
 };
 
-const renderSort = () => {
-  const sort = new Sort();
-
-  render(tripContainer, sort.getElement(), position.AFTERBEGIN);
-};
-
-renderTripInfo();
 renderMenu(getMenu());
 renderFilters(getFilters());
-renderTotalPrice();
-renderSort();
 
 const tripController = new TripController(tripContainer, events);
 
 tripController.init();
+
+if (document.querySelector(`.trip-days`)) {
+  renderTripInfo();
+  renderTotalPrice();
+}
 

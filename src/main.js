@@ -5,7 +5,7 @@ import {TotalPrice} from './components/total-price';
 import {getMenu, getFilters} from './data';
 import {render, position} from './utils';
 import {events} from './components/points';
-import {TripController} from './components/trip-controller';
+import {TripController} from './controllers/trip-controller';
 
 const infoContainer = document.querySelector(`.trip-main__trip-info`);
 const menuContainer = document.querySelector(`.trip-main__trip-controls`);

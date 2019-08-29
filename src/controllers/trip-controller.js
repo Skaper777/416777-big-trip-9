@@ -1,10 +1,9 @@
-import {Sort} from './sort';
-import {TripDays} from './trip-days';
-import {Day} from './day';
+import {Sort} from '../components/sort';
+import {TripDays} from '../components/trip-days';
+import {Day} from '../components/day';
 import {render, position} from '../utils';
-import {Point} from './event';
-import {EditEvent} from './edit-form';
-import {EventMessage} from './event-message';
+import {EventMessage} from '../components/event-message';
+import {PointController} from './point-controller';
 
 export class TripController {
   constructor(container, events) {
@@ -13,6 +12,9 @@ export class TripController {
     this._sort = new Sort();
     this._tripDays = new TripDays();
     this._day = new Day();
+    this._eventsContainer = document.querySelector(`.trip-events__list`);
+
+    this._subscriptions = [];
   }
 
   init() {
@@ -31,6 +33,11 @@ export class TripController {
     if (!this._container.contains(this._tripDays.getElement())) {
       this._renderEventMessage();
     }
+  }
+
+  _renderEvent(eventMock) {
+    const pointController = new PointController(this._eventsContainer, eventMock, this._onChangeView, this._onDataChange);
+    this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 
   _onSortLabelClick(evt) {
@@ -52,42 +59,6 @@ export class TripController {
         this._events.forEach((mock) => this._renderEvent(mock));
         break;
     }
-  }
-
-  _renderEvent(eventMock) {
-    const point = new Point(eventMock);
-    const editForm = new EditEvent(eventMock);
-    const eventContainer = document.querySelector(`.trip-events__list`);
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        eventContainer.replaceChild(point.getElement(), editForm.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    point.getElement()
-      .querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, () => {
-        eventContainer.replaceChild(editForm.getElement(), point.getElement());
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    editForm.getElement()
-      .querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, () => {
-        eventContainer.replaceChild(point.getElement(), editForm.getElement());
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    editForm.getElement()
-      .querySelector(`form`)
-      .addEventListener(`submit`, () => {
-        eventContainer.replaceChild(point.getElement(), editForm.getElement());
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    render(eventContainer, point.getElement(), position.BEFOREEND);
   }
 
   _renderEventMessage() {

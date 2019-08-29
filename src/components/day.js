@@ -1,7 +1,7 @@
 import {AbstractComponent} from './abstract';
 
 export class Day extends AbstractComponent {
-  constructor() {
+  constructor(date, eventsCount) {
     super();
   }
 

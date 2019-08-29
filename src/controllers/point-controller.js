@@ -1,6 +1,6 @@
 import {render, position} from '../utils';
-import {Point} from './event';
-import {EditEvent} from './edit-form';
+import {Point} from '../components/event';
+import {EditEvent} from '../components/edit-form';
 
 export class PointController {
   constructor(container, data, onDataChange, onChangeView) {
@@ -43,6 +43,6 @@ export class PointController {
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
-    render(this._container.getElement(), this._point.getElement(), position.BEFOREEND);
+    render(this._container, this._point.getElement(), position.BEFOREEND);
   }
 }

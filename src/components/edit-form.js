@@ -2,12 +2,13 @@ import {formatDate} from '../utils';
 import {AbstractComponent} from './abstract';
 
 export class EditEvent extends AbstractComponent {
-  constructor({type, getTitle, destination, time, description, photo}) {
+  constructor({type, getTitle, destination, time, price, description, photo}) {
     super();
     this._type = type;
     this._getTitle = getTitle;
     this._destination = destination;
     this._time = time;
+    this._price = price;
     this._description = description;
     this._photo = photo;
   }
@@ -113,7 +114,7 @@ export class EditEvent extends AbstractComponent {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${this._price}>
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

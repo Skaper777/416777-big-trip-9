@@ -12,7 +12,6 @@ export class TripController {
     this._sort = new Sort();
     this._tripDays = new TripDays();
     this._day = new Day();
-    this._eventsContainer = document.querySelector(`.trip-events__list`);
 
     this._subscriptions = [];
   }
@@ -23,6 +22,7 @@ export class TripController {
     render(this._tripDays.getElement(), this._day.getElement(), position.AFTERBEGIN);
 
     const sortBtns = document.querySelectorAll(`.trip-sort__btn`);
+
 
     for (let i = 0; i < sortBtns.length; i++) {
       sortBtns[i].addEventListener(`click`, (evt) => this._onSortLabelClick(evt));
@@ -36,7 +36,8 @@ export class TripController {
   }
 
   _renderEvent(eventMock) {
-    const pointController = new PointController(this._eventsContainer, eventMock, this._onChangeView, this._onDataChange);
+    const eventsContainer = document.querySelector(`.trip-events__list`);
+    const pointController = new PointController(eventsContainer, eventMock, this._onChangeView, this._onDataChange);
     this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 

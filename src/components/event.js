@@ -22,9 +22,9 @@ export class Point extends AbstractComponent {
 
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${formatTime(this._time.getRandomIn())}</time>
+          <time class="event__start-time" datetime="2019-03-18T10:30">${formatTime(this._time.timeIn)}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${formatTime(this._time.getRandomOut())}</time>
+          <time class="event__end-time" datetime="2019-03-18T11:00">${formatTime(this._time.timeOut)}</time>
         </p>
         <p class="event__duration">${this._time.getDurationHours()}H ${this._time.getDurationMinutes()}M</p>
       </div>

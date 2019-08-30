@@ -23,7 +23,6 @@ export class TripController {
 
     const sortBtns = document.querySelectorAll(`.trip-sort__btn`);
 
-
     for (let i = 0; i < sortBtns.length; i++) {
       sortBtns[i].addEventListener(`click`, (evt) => this._onSortLabelClick(evt));
     }
@@ -33,6 +32,14 @@ export class TripController {
     if (!this._container.contains(this._tripDays.getElement())) {
       this._renderEventMessage();
     }
+  }
+
+  _onDataChange() {
+
+  }
+
+  _onChangeView() {
+
   }
 
   _renderEvent(eventMock) {
@@ -47,7 +54,7 @@ export class TripController {
 
     switch (evt.target.dataset.sortType) {
       case `time`:
-        const sortedByTime = this._events.slice().sort((a, b) => a.date - b.date);
+        const sortedByTime = this._events.slice().sort((a, b) => (a.time.timeOut - a.time.timeIn) - (b.time.timeOut - b.time.timeIn));
         sortedByTime.forEach((mock) => this._renderEvent(mock));
         break;
 

@@ -69,25 +69,13 @@ export const getEvent = () => ({
   description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`.split(`. `).sort(() => 0.5 - Math.random()),
 
   time: {
-    date: Date.now(),
-    maxDate: 20000000,
-    hoursIn: ``,
-    hoursOut: ``,
+    timeIn: Date.now() + Math.random() * 50000000,
+    timeOut: (Date.now() + Math.random() * 50000000) + 50000000,
     durationHours: ``,
     durationMinutes: ``,
 
-    getRandomIn() {
-      this.hoursIn = this.date + Math.random() * this.maxDate;
-      return this.hoursIn;
-    },
-
-    getRandomOut() {
-      this.hoursOut = (this.date + Math.random() * this.maxDate) + this.maxDate;
-      return this.hoursOut;
-    },
-
     getDurationHours() {
-      let time = this.hoursOut - this.hoursIn;
+      let time = this.timeOut - this.timeIn;
       this.durationHours = Math.floor(time / 3600000);
       this.durationMinutes = Math.floor((time / 60000) - this.durationHours * 60);
       return this.durationHours;
@@ -103,22 +91,22 @@ export const getEvent = () => ({
   offers: getRandomList([{
     type: `Add luggage`,
     price: 10,
-    check: false
+    check: Boolean(Math.round(Math.random))
   },
   {
     type: `Switch to comfort class`,
     price: 150,
-    check: false
+    check: Boolean(Math.round(Math.random))
   },
   {
     type: `Add meal`,
     price: 2,
-    check: false
+    check: Boolean(Math.round(Math.random))
   },
   {
     type: `Choose seats`,
     price: 9,
-    check: false
+    check: Boolean(Math.round(Math.random))
   }
   ], 2),
 

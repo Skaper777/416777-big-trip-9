@@ -1,5 +1,4 @@
 import {
-  getRandomList,
   getRandomValue
 } from './utils';
 
@@ -16,43 +15,6 @@ export const getEvent = () => ({
     `sightseeing`,
     `restaurant`
   ][Math.floor(Math.random() * 10)],
-
-  get getTitle() {
-    switch (this.type) {
-      case `taxi`:
-        return `Taxi to`;
-
-      case `bus`:
-        return `Bus to`;
-
-      case `train`:
-        return `Train to`;
-
-      case `ship`:
-        return `Ship to`;
-
-      case `transport`:
-        return `Transport to`;
-
-      case `drive`:
-        return `Drive to`;
-
-      case `flight`:
-        return `Flight to`;
-
-      case `check-in`:
-        return `Check-in in`;
-
-      case `sightseeing`:
-        return `Sightseeing in`;
-
-      case `restaurant`:
-        return `Restaurant in`;
-
-      default:
-        return ``;
-    }
-  },
 
   destination: [
     `Saint-Petersburg`,
@@ -88,27 +50,37 @@ export const getEvent = () => ({
 
   price: getRandomValue(10, 200),
 
-  offers: getRandomList([{
+  offers: [{
+    name: `luggage`,
     type: `Add luggage`,
-    price: 10,
-    check: Boolean(Math.round(Math.random))
+    price: 30,
+    check: Boolean(Math.round(Math.random()))
   },
   {
+    name: `comfort`,
     type: `Switch to comfort class`,
-    price: 150,
-    check: Boolean(Math.round(Math.random))
+    price: 100,
+    check: Boolean(Math.round(Math.random()))
   },
   {
+    name: `meal`,
     type: `Add meal`,
-    price: 2,
-    check: Boolean(Math.round(Math.random))
+    price: 15,
+    check: Boolean(Math.round(Math.random()))
   },
   {
+    name: `seats`,
     type: `Choose seats`,
-    price: 9,
-    check: Boolean(Math.round(Math.random))
+    price: 5,
+    check: Boolean(Math.round(Math.random()))
+  },
+  {
+    name: `train`,
+    type: `Travel by train`,
+    price: 40,
+    check: Boolean(Math.round(Math.random()))
   }
-  ], 2),
+  ],
 
 });
 

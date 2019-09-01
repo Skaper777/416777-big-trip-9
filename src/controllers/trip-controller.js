@@ -17,7 +17,7 @@ export class TripController {
 
     this._subscriptions = [];
     this._onChangeView = this._onChangeView.bind(this);
-	  this._onDataChange = this._onDataChange.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
@@ -43,7 +43,7 @@ export class TripController {
     this._eventsList.removeElement();
 
     render(this._day.getElement(), this._eventsList.getElement(), position.BEFOREEND);
-	  events.forEach((mock) => this._renderEvent(mock));
+    events.forEach((mock) => this._renderEvent(mock));
   }
 
   _onDataChange(newData, oldData) {

@@ -36,7 +36,7 @@ export class PointController {
 
   setDefaultView() {
     if (this._container.getElement().contains(this._editForm.getElement())) {
-      this._container.replaceChild(this._point.getElement(), this._editForm.getElement());
+      this._container.getElement().replaceChild(this._point.getElement(), this._editForm.getElement());
     }
   }
 
@@ -50,8 +50,10 @@ export class PointController {
 
     this._point.getElement()
       .querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, () => {
-        this._container.replaceChild(this._editForm.getElement(), this._point.getElement());
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+			  this._onChangeView();
+        this._container.getElement().replaceChild(this._editForm.getElement(), this._point.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -75,7 +77,20 @@ export class PointController {
           destination: formData.get(`event-destination`),
           time: {
             timeIn: moment(formData.get(`event-start-time`), `DD/MM/YYYY`).valueOf(),
-            timeOut: moment(formData.get(`event-end-time`), `DD/MM/YYYY`).valueOf()
+            timeOut: moment(formData.get(`event-end-time`), `DD/MM/YYYY`).valueOf(),
+            durationHours: ``,
+            durationMinutes: ``,
+
+            getDurationHours() {
+              let time = this.timeOut - this.timeIn;
+              this.durationHours = Math.floor(time / 3600000);
+              this.durationMinutes = Math.floor((time / 60000) - this.durationHours * 60);
+              return this.durationHours;
+            },
+
+            getDurationMinutes() {
+              return this.durationMinutes;
+            }
           },
           price: formData.get(`event-price`),
           offers: offersDom.map((item) => (
@@ -85,16 +100,19 @@ export class PointController {
               price: item.querySelector(`.event__offer-price`).textContent,
               check: item.querySelector(`.event__offer-checkbox`).checked
             }
-          ))
+          )),
+          photo() {
+            return `http://picsum.photos/300/150?r=${Math.random()}`;
+          },
+          description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`.split(`. `).sort(() => 0.5 - Math.random()),
+
         };
 
         this._onDataChange(entry, this._data);
 
-        // this._container.replaceChild(this._point.getElement(), this._editForm.getElement());
-
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
-    render(this._container, this._point.getElement(), position.AFTERBEGIN);
+    render(this._container.getElement(), this._point.getElement(), position.AFTERBEGIN);
   }
 }

@@ -39,17 +39,17 @@ export class TripController {
     }
   }
 
-  _renderEventsContainer(events) {
+  _renderEvents(events) {
     this._eventsList.removeElement();
 
     render(this._day.getElement(), this._eventsList.getElement(), position.BEFOREEND);
 	  events.forEach((mock) => this._renderEvent(mock));
   }
 
-  _onDataChange(oldData, newData) {
+  _onDataChange(newData, oldData) {
     this._events[this._events.findIndex((it) => it === oldData)] = newData;
 
-    this._renderEventsContainer(this._events);
+    this._renderEvents(this._events);
   }
 
   _onChangeView() {
@@ -57,7 +57,7 @@ export class TripController {
   }
 
   _renderEvent(eventMock) {
-    const pointController = new PointController(this._eventsList, eventMock, this._onChangeView, this._onDataChange);
+    const pointController = new PointController(this._eventsList, eventMock, this._onDataChange, this._onChangeView);
     this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 

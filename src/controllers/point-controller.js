@@ -8,7 +8,7 @@ export class PointController {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onChangeView = onChangeView;
-
+    this._data = data;
     this._point = new Point(data);
     this._editForm = new EditEvent(data);
 

@@ -13,16 +13,24 @@ export class PointController {
     this._editForm = new EditEvent(data);
 
     this.init();
-    this._checkType();
+    this._onTypeHandler();
   }
 
-  _checkType() {
+  _onTypeHandler() {
     const checkboxes = this._editForm.getElement().querySelectorAll(`.event__type-input`);
 
     for (let i = 0; i < checkboxes.length; i++) {
       if (this._editForm._type === checkboxes[i].value) {
         checkboxes[i].checked = true;
       }
+
+      checkboxes[i].addEventListener(`click`, (evt) => {
+        if (evt.target === checkboxes[i]) {
+          this._editForm._type = checkboxes[i].value;
+          this._editForm.getElement().querySelector(`.event__type-icon`).src = `img/icons/${this._editForm._type}.png`;
+          this._editForm.getElement().querySelector(`.event__type-output`).textContent = `${this._editForm._getTitle()}`;
+        }
+      });
     }
   }
 
@@ -60,6 +68,7 @@ export class PointController {
         evt.preventDefault();
 
         const formData = new FormData(this._editForm.getElement().querySelector(`.event--edit`));
+        const offersDom = Array.from(this._editForm.getElement().querySelectorAll(`.event__offer-selector`));
 
         const entry = {
           type: formData.get(`event-type`),
@@ -69,13 +78,23 @@ export class PointController {
             timeOut: moment(formData.get(`event-end-time`), `DD/MM/YYYY`).valueOf()
           },
           price: formData.get(`event-price`),
-          offers: new Array(formData.getAll(`event-offer-luggage`))
+          offers: offersDom.map((item) => (
+            {
+              name: item.querySelector(`.event__offer-checkbox`).name,
+              type: item.querySelector(`.event__offer-title`).textContent,
+              price: item.querySelector(`.event__offer-price`).textContent,
+              check: item.querySelector(`.event__offer-checkbox`).checked
+            }
+          ))
         };
 
-        //this._container.replaceChild(this._point.getElement(), this._editForm.getElement());
+        this._onDataChange(entry, this._data);
+
+        // this._container.replaceChild(this._point.getElement(), this._editForm.getElement());
+
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
-    render(this._container, this._point.getElement(), position.BEFOREEND);
+    render(this._container, this._point.getElement(), position.AFTERBEGIN);
   }
 }

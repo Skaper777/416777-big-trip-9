@@ -178,7 +178,7 @@ export class EditEvent extends AbstractComponent {
         <div class="event__available-offers">
         ${this._offers.map((item) =>
     `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.name}-1" type="checkbox" name="event-offer-${item.name}" ${item.check ? `checked` : ``}>
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.name}-1" type="checkbox" name="${item.name}" ${item.check ? `checked` : ``}>
             <label class="event__offer-label" for="event-offer-${item.name}-1">
               <span class="event__offer-title">${item.type}</span>
               &plus;

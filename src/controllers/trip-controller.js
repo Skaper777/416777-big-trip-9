@@ -3,6 +3,7 @@ import {TripDays} from '../components/trip-days';
 import {Day} from '../components/day';
 import {render, position} from '../utils';
 import {EventMessage} from '../components/event-message';
+import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 
 export class TripController {
@@ -12,14 +13,18 @@ export class TripController {
     this._sort = new Sort();
     this._tripDays = new TripDays();
     this._day = new Day();
+    this._eventsList = new EventsList();
 
     this._subscriptions = [];
+    this._onChangeView = this._onChangeView.bind(this);
+	  this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
     render(this._container, this._sort.getElement(), position.AFTERBEGIN);
     render(this._container, this._tripDays.getElement(), position.BEFOREEND);
     render(this._tripDays.getElement(), this._day.getElement(), position.AFTERBEGIN);
+    render(this._day.getElement(), this._eventsList.getElement(), position.BEFOREEND);
 
     const sortBtns = document.querySelectorAll(`.trip-sort__btn`);
 
@@ -34,17 +39,25 @@ export class TripController {
     }
   }
 
-  _onDataChange() {
+  _renderEventsContainer(events) {
+    this._eventsList.removeElement();
 
+    render(this._day.getElement(), this._eventsList.getElement(), position.BEFOREEND);
+	  events.forEach((mock) => this._renderEvent(mock));
+  }
+
+  _onDataChange(oldData, newData) {
+    this._events[this._events.findIndex((it) => it === oldData)] = newData;
+
+    this._renderEventsContainer(this._events);
   }
 
   _onChangeView() {
-
+    this._subscriptions.forEach((it) => it());
   }
 
   _renderEvent(eventMock) {
-    const eventsContainer = document.querySelector(`.trip-events__list`);
-    const pointController = new PointController(eventsContainer, eventMock, this._onChangeView, this._onDataChange);
+    const pointController = new PointController(this._eventsList, eventMock, this._onChangeView, this._onDataChange);
     this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 

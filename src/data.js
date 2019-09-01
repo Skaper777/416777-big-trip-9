@@ -51,31 +51,31 @@ export const getEvent = () => ({
   price: getRandomValue(10, 200),
 
   offers: [{
-    name: `luggage`,
+    name: `event-offer-luggage`,
     type: `Add luggage`,
     price: 30,
     check: Boolean(Math.round(Math.random()))
   },
   {
-    name: `comfort`,
+    name: `event-offer-comfort`,
     type: `Switch to comfort class`,
     price: 100,
     check: Boolean(Math.round(Math.random()))
   },
   {
-    name: `meal`,
+    name: `event-offer-meal`,
     type: `Add meal`,
     price: 15,
     check: Boolean(Math.round(Math.random()))
   },
   {
-    name: `seats`,
+    name: `event-offer-seats`,
     type: `Choose seats`,
     price: 5,
     check: Boolean(Math.round(Math.random()))
   },
   {
-    name: `train`,
+    name: `event-offer-train`,
     type: `Travel by train`,
     price: 40,
     check: Boolean(Math.round(Math.random()))

@@ -52,7 +52,7 @@ export class PointController {
       .querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
-			  this._onChangeView();
+        this._onChangeView();
         this._container.getElement().replaceChild(this._editForm.getElement(), this._point.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });

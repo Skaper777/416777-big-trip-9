@@ -1,10 +1,10 @@
-import {Sort} from './sort';
-import {TripDays} from './trip-days';
-import {Day} from './day';
+import {Sort} from '../components/sort';
+import {TripDays} from '../components/trip-days';
+import {Day} from '../components/day';
 import {render, position} from '../utils';
-import {Point} from './event';
-import {EditEvent} from './edit-form';
-import {EventMessage} from './event-message';
+import {EventMessage} from '../components/event-message';
+import {EventsList} from '../components/events-list';
+import {PointController} from './point-controller';
 
 export class TripController {
   constructor(container, events) {
@@ -13,12 +13,18 @@ export class TripController {
     this._sort = new Sort();
     this._tripDays = new TripDays();
     this._day = new Day();
+    this._eventsList = new EventsList();
+
+    this._subscriptions = [];
+    this._onChangeView = this._onChangeView.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
   }
 
   init() {
     render(this._container, this._sort.getElement(), position.AFTERBEGIN);
     render(this._container, this._tripDays.getElement(), position.BEFOREEND);
     render(this._tripDays.getElement(), this._day.getElement(), position.AFTERBEGIN);
+    render(this._day.getElement(), this._eventsList.getElement(), position.BEFOREEND);
 
     const sortBtns = document.querySelectorAll(`.trip-sort__btn`);
 
@@ -33,13 +39,35 @@ export class TripController {
     }
   }
 
+  _renderEvents(events) {
+    this._eventsList.removeElement();
+
+    render(this._day.getElement(), this._eventsList.getElement(), position.BEFOREEND);
+    events.forEach((mock) => this._renderEvent(mock));
+  }
+
+  _onDataChange(newData, oldData) {
+    this._events[this._events.findIndex((it) => it === oldData)] = newData;
+
+    this._renderEvents(this._events);
+  }
+
+  _onChangeView() {
+    this._subscriptions.forEach((it) => it());
+  }
+
+  _renderEvent(eventMock) {
+    const pointController = new PointController(this._eventsList, eventMock, this._onDataChange, this._onChangeView);
+    this._subscriptions.push(pointController.setDefaultView.bind(pointController));
+  }
+
   _onSortLabelClick(evt) {
 
     document.querySelector(`.trip-events__list`).innerHTML = ``;
 
     switch (evt.target.dataset.sortType) {
       case `time`:
-        const sortedByTime = this._events.slice().sort((a, b) => a.date - b.date);
+        const sortedByTime = this._events.slice().sort((a, b) => (a.time.timeOut - a.time.timeIn) - (b.time.timeOut - b.time.timeIn));
         sortedByTime.forEach((mock) => this._renderEvent(mock));
         break;
 
@@ -52,42 +80,6 @@ export class TripController {
         this._events.forEach((mock) => this._renderEvent(mock));
         break;
     }
-  }
-
-  _renderEvent(eventMock) {
-    const point = new Point(eventMock);
-    const editForm = new EditEvent(eventMock);
-    const eventContainer = document.querySelector(`.trip-events__list`);
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === `Escape` || evt.key === `Esc`) {
-        eventContainer.replaceChild(point.getElement(), editForm.getElement());
-        document.removeEventListener(`keydown`, onEscKeyDown);
-      }
-    };
-
-    point.getElement()
-      .querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, () => {
-        eventContainer.replaceChild(editForm.getElement(), point.getElement());
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    editForm.getElement()
-      .querySelector(`.event__rollup-btn`)
-      .addEventListener(`click`, () => {
-        eventContainer.replaceChild(point.getElement(), editForm.getElement());
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    editForm.getElement()
-      .querySelector(`form`)
-      .addEventListener(`submit`, () => {
-        eventContainer.replaceChild(point.getElement(), editForm.getElement());
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-    render(eventContainer, point.getElement(), position.BEFOREEND);
   }
 
   _renderEventMessage() {

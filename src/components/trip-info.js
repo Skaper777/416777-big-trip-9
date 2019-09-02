@@ -35,7 +35,7 @@ const getTripCities = (arr) => {
 
 const getTripDate = () => {
   let days = [];
-  let date = events[0].time.date;
+  let date = events[0].time.timeIn;
   let day = new Date(date).toString().split(` `);
   let newDay = [day[1], day[2]].join(` `);
   days.push(newDay);

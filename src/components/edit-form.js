@@ -1,15 +1,53 @@
-import {formatDate} from '../utils';
 import {AbstractComponent} from './abstract';
+import moment from 'moment';
 
 export class EditEvent extends AbstractComponent {
-  constructor({type, getTitle, destination, time, description, photo}) {
+  constructor({type, destination, time, price, offers, description, photo}) {
     super();
     this._type = type;
-    this._getTitle = getTitle;
     this._destination = destination;
     this._time = time;
+    this._price = price;
+    this._offers = offers;
     this._description = description;
     this._photo = photo;
+  }
+
+  _getTitle() {
+    switch (this._type) {
+      case `taxi`:
+        return `Taxi to`;
+
+      case `bus`:
+        return `Bus to`;
+
+      case `train`:
+        return `Train to`;
+
+      case `ship`:
+        return `Ship to`;
+
+      case `transport`:
+        return `Transport to`;
+
+      case `drive`:
+        return `Drive to`;
+
+      case `flight`:
+        return `Flight to`;
+
+      case `check-in`:
+        return `Check-in in`;
+
+      case `sightseeing`:
+        return `Sightseeing in`;
+
+      case `restaurant`:
+        return `Restaurant in`;
+
+      default:
+        return ``;
+    }
   }
 
   getTemplate() {
@@ -58,7 +96,7 @@ export class EditEvent extends AbstractComponent {
             </div>
 
             <div class="event__type-item">
-              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
               <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
             </div>
           </fieldset>
@@ -86,7 +124,7 @@ export class EditEvent extends AbstractComponent {
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-        ${this._getTitle}
+        ${this._getTitle()}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._destination}" list="destination-list-1">
         <datalist id="destination-list-1">
@@ -100,12 +138,12 @@ export class EditEvent extends AbstractComponent {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(this._time.getRandomIn())}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${moment(this._time.timeIn).format(`DD/MM/YY hh:mm`)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(this._time.getRandomOut())}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${moment(this._time.timeOut).format(`DD/MM/YY hh:mm`)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -113,7 +151,7 @@ export class EditEvent extends AbstractComponent {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value=${this._price}>
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -138,50 +176,15 @@ export class EditEvent extends AbstractComponent {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
-            <label class="event__offer-label" for="event-offer-luggage-1">
-              <span class="event__offer-title">Add luggage</span>
+        ${this._offers.map((item) =>
+    `<div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.name}-1" type="checkbox" name="${item.name}" ${item.check ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-${item.name}-1">
+              <span class="event__offer-title">${item.type}</span>
               &plus;
-              &euro;&nbsp;<span class="event__offer-price">30</span>
+              &euro;&nbsp;<span class="event__offer-price">${item.price}</span>
             </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort">
-            <label class="event__offer-label" for="event-offer-comfort-1">
-              <span class="event__offer-title">Switch to comfort class</span>
-              &plus;
-              &euro;&nbsp;<span class="event__offer-price">100</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-            <label class="event__offer-label" for="event-offer-meal-1">
-              <span class="event__offer-title">Add meal</span>
-              &plus;
-              &euro;&nbsp;<span class="event__offer-price">15</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-            <label class="event__offer-label" for="event-offer-seats-1">
-              <span class="event__offer-title">Choose seats</span>
-              &plus;
-              &euro;&nbsp;<span class="event__offer-price">5</span>
-            </label>
-          </div>
-
-          <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-            <label class="event__offer-label" for="event-offer-train-1">
-              <span class="event__offer-title">Travel by train</span>
-              &plus;
-              &euro;&nbsp;<span class="event__offer-price">40</span>
-            </label>
-          </div>
+          </div>`).join(``)}
         </div>
       </section>
 

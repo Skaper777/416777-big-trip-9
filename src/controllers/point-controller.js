@@ -52,7 +52,7 @@ export class PointController {
       allowInput: true,
       defaultDate: this._data.time.timeIn,
       enableTime: true,
-      dateFormat: `Y-m-d H:i`,
+      altFormat: `d-m-y H:i`,
     });
 
     flatpickr(times[1], {
@@ -60,7 +60,7 @@ export class PointController {
       allowInput: true,
       defaultDate: this._data.time.timeOut,
       enableTime: true,
-      dateFormat: `Y-m-d H:i`,
+      altFormat: `d-m-y H:i`,
     });
 
     const onEscKeyDown = (evt) => {
@@ -98,13 +98,13 @@ export class PointController {
           type: formData.get(`event-type`),
           destination: formData.get(`event-destination`),
           time: {
-            timeIn: moment(formData.get(`event-start-time`)),
+            timeIn: formData.get(`event-start-time`),
             timeOut: formData.get(`event-end-time`),
             durationHours: ``,
             durationMinutes: ``,
 
             getDurationHours() {
-              let time = this.timeOut - this.timeIn;
+              let time = moment(this.timeOut).format(`x`) - moment(this.timeIn).format(`x`);
               this.durationHours = Math.floor(time / 3600000);
               this.durationMinutes = Math.floor((time / 60000) - this.durationHours * 60);
               return this.durationHours;

@@ -2,6 +2,9 @@ import {render, position} from '../utils';
 import {Point} from '../components/event';
 import {EditEvent} from '../components/edit-form';
 import moment from 'moment';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 export class PointController {
   constructor(container, data, onDataChange, onChangeView) {
@@ -41,9 +44,28 @@ export class PointController {
   }
 
   init() {
+
+    const times = this._editForm.getElement().querySelectorAll(`.event__input--time`);
+
+    flatpickr(times[0], {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._data.time.timeIn,
+      enableTime: true,
+      altFormat: `d-m-y H:i`,
+    });
+
+    flatpickr(times[1], {
+      altInput: true,
+      allowInput: true,
+      defaultDate: this._data.time.timeOut,
+      enableTime: true,
+      altFormat: `d-m-y H:i`,
+    });
+
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._container.replaceChild(this._point.getElement(), this._editForm.getElement());
+        this._container.getElement().replaceChild(this._point.getElement(), this._editForm.getElement());
         document.removeEventListener(`keydown`, onEscKeyDown);
       }
     };
@@ -60,7 +82,7 @@ export class PointController {
     this._editForm.getElement()
       .querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, () => {
-        this._container.replaceChild(this._point.getElement(), this._editForm.getElement());
+        this._container.getElement().replaceChild(this._point.getElement(), this._editForm.getElement());
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
@@ -76,13 +98,13 @@ export class PointController {
           type: formData.get(`event-type`),
           destination: formData.get(`event-destination`),
           time: {
-            timeIn: moment(formData.get(`event-start-time`), `DD/MM/YYYY`).valueOf(),
-            timeOut: moment(formData.get(`event-end-time`), `DD/MM/YYYY`).valueOf(),
+            timeIn: formData.get(`event-start-time`),
+            timeOut: formData.get(`event-end-time`),
             durationHours: ``,
             durationMinutes: ``,
 
             getDurationHours() {
-              let time = this.timeOut - this.timeIn;
+              let time = moment(this.timeOut).format(`x`) - moment(this.timeIn).format(`x`);
               this.durationHours = Math.floor(time / 3600000);
               this.durationMinutes = Math.floor((time / 60000) - this.durationHours * 60);
               return this.durationHours;

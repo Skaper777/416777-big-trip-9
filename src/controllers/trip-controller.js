@@ -1,12 +1,10 @@
 import {Sort} from '../components/sort';
 import {TripDays} from '../components/trip-days';
 import {Day} from '../components/day';
-import {render, position} from '../utils';
+import {render, position, Mode} from '../utils';
 import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 import {EventMessage} from '../components/event-message';
-
-const PointControllerMode = Mode;
 
 export class TripController {
   constructor(container, events) {
@@ -49,11 +47,13 @@ export class TripController {
   }
 
   createEvent() {
+    const PointControllerMode = Mode;
+
     if (this._creatingEvent) {
       return;
     }
 
-    const defaulEvent = {
+    const defaultEvent = {
       type: ``,
       destination: ``,
       time: {
@@ -80,7 +80,7 @@ export class TripController {
       description: ``,
     };
 
-    this._creatingEvent = new PointController(this._eventsList, defaulEvent, PointControllerMode.ADDING, this._onDataChange, this._onChangeView);
+    this._creatingEvent = new PointController(this._eventsList, defaultEvent, PointControllerMode.ADDING, this._onDataChange, this._onChangeView);
   }
 
   _renderEvents(events) {

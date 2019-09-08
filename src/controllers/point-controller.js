@@ -1,4 +1,4 @@
-import {render, position} from '../utils';
+import {render, position, Mode} from '../utils';
 import {Point} from '../components/event';
 import {EditEvent} from '../components/edit-form';
 import {EventMessage} from '../components/event-message';
@@ -6,11 +6,6 @@ import moment from 'moment';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
-
-const Mode = {
-  ADDING: `adding`,
-  DEFAULT: `default`,
-};
 
 export class PointController {
   constructor(container, data, mode, onDataChange, onChangeView) {

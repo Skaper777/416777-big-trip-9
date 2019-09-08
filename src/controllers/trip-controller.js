@@ -5,7 +5,7 @@ import {render, position, Mode} from '../utils';
 import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 import {EventMessage} from '../components/event-message';
-// import {};
+import {types} from '../data';
 
 const PointControllerMode = Mode;
 
@@ -50,14 +50,12 @@ export class TripController {
   }
 
   createEvent() {
-
-
     if (this._creatingEvent) {
       return;
     }
 
     const defaultEvent = {
-      type: ``,
+      type: types[0],
       destination: ``,
       time: {
         timeIn: new Date(),
@@ -75,7 +73,7 @@ export class TripController {
           return this.durationMinutes;
         }
       },
-      price: ``,
+      price: 0,
       offers: [],
       photo() {
         return `http://picsum.photos/300/150?r=${Math.random()}`;
@@ -84,6 +82,7 @@ export class TripController {
     };
 
     this._creatingEvent = new PointController(this._eventsList, defaultEvent, PointControllerMode.ADDING, this._onDataChange, this._onChangeView);
+
   }
 
   _renderEvents(events) {
@@ -97,12 +96,18 @@ export class TripController {
     const index = this._events.findIndex((mock) => mock === oldData);
 
     if (newData === null) {
-      this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
-    } else if (oldData === null) {
-      this._creatingEvent = null;
-      this._events = [newData, ...this._events];
+      if (oldData === null) {
+        this._creatingEvent = null;
+      } else {
+        this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
+      }
     } else {
-      this._events[index] = newData;
+      if (oldData === null) {
+        this._creatingEvent = null;
+        this._events = [newData, ...this._events];
+      } else {
+        this._events[index] = newData;
+      }
     }
 
     this._renderEvents(this._events);
@@ -125,7 +130,6 @@ export class TripController {
   }
 
   _onSortLabelClick(evt) {
-
     document.querySelector(`.trip-events__list`).innerHTML = ``;
 
     switch (evt.target.dataset.sortType) {

@@ -60,9 +60,11 @@ const renderMenu = (mock) => {
 
 const addBtn = document.querySelector(`.trip-main__event-add-btn`);
 
-addBtn.addEventListener(`click`, () => {
+const addEvent = () => {
   tripController.createEvent();
-});
+};
+
+addBtn.addEventListener(`click`, addEvent);
 
 const renderFilters = (mock) => {
   const filters = new Filters(mock);

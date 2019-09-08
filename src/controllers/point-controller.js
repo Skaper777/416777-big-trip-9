@@ -62,9 +62,11 @@ export class PointController {
 
   init(mode) {
     let currentView = this._point;
+    let renderPosition = position.BEFOREEND;
 
     if (mode === Mode.ADDING) {
       currentView = this._editForm;
+      renderPosition = position.AFTERBEGIN;
     }
 
     const times = this._editForm.getElement().querySelectorAll(`.event__input--time`);
@@ -159,11 +161,15 @@ export class PointController {
 
     this._editForm.getElement()
       .querySelector(`.event__reset-btn`)
-      .addEventListener(`click`, () => {
-        this._onDataChange(null, this._data);
-        this._checkLengthTrip();
+      .addEventListener(`click`, (e) => {
+        if (mode === Mode.DEFAULT) {
+          e.preventDefault();
+          this._onDataChange(null, this._data);
+        } else {
+          this._onDataChange(null, null);
+        }
       });
 
-    render(this._container.getElement(), currentView.getElement(), position.AFTERBEGIN);
+    render(this._container.getElement(), currentView.getElement(), renderPosition);
   }
 }

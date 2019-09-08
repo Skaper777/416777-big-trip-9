@@ -2,19 +2,21 @@ import {
   getRandomValue
 } from './utils';
 
+export const types = [
+  `taxi`,
+  `bus`,
+  `train`,
+  `ship`,
+  `transport`,
+  `drive`,
+  `flight`,
+  `check-in`,
+  `sightseeing`,
+  `restaurant`
+];
+
 export const getEvent = () => ({
-  type: [
-    `taxi`,
-    `bus`,
-    `train`,
-    `ship`,
-    `transport`,
-    `drive`,
-    `flight`,
-    `check-in`,
-    `sightseeing`,
-    `restaurant`
-  ][Math.floor(Math.random() * 10)],
+  type: types[Math.floor(Math.random() * 10)],
 
   destination: [
     `Saint-Petersburg`,

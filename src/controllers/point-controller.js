@@ -168,6 +168,8 @@ export class PointController {
         } else {
           this._onDataChange(null, null);
         }
+
+        this._checkLengthTrip();
       });
 
     render(this._container.getElement(), currentView.getElement(), renderPosition);

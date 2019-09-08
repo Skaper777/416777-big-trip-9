@@ -1,13 +1,14 @@
-import {render, position} from '../utils';
+import {render, position, Mode} from '../utils';
 import {Point} from '../components/event';
 import {EditEvent} from '../components/edit-form';
+import {EventMessage} from '../components/event-message';
 import moment from 'moment';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
 
 export class PointController {
-  constructor(container, data, onDataChange, onChangeView) {
+  constructor(container, data, mode, onDataChange, onChangeView) {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onChangeView = onChangeView;
@@ -15,7 +16,7 @@ export class PointController {
     this._point = new Point(data);
     this._editForm = new EditEvent(data);
 
-    this.init();
+    this.init(mode);
     this._onTypeHandler();
   }
 
@@ -37,13 +38,36 @@ export class PointController {
     }
   }
 
+  _renderEventMessage() {
+    const message = new EventMessage();
+    const mainContainer = document.querySelector(`.page-main`);
+
+    render(mainContainer, message.getElement(), position.AFTERBEGIN);
+  }
+
+  _checkLengthTrip() {
+    const points = document.querySelectorAll(`.event`);
+
+    if (points.length === 0) {
+      document.querySelector(`.trip-events`).remove();
+      this._renderEventMessage();
+    }
+  }
+
   setDefaultView() {
     if (this._container.getElement().contains(this._editForm.getElement())) {
       this._container.getElement().replaceChild(this._point.getElement(), this._editForm.getElement());
     }
   }
 
-  init() {
+  init(mode) {
+    let currentView = this._point;
+    let renderPosition = position.BEFOREEND;
+
+    if (mode === Mode.ADDING) {
+      currentView = this._editForm;
+      renderPosition = position.AFTERBEGIN;
+    }
 
     const times = this._editForm.getElement().querySelectorAll(`.event__input--time`);
 
@@ -130,11 +154,24 @@ export class PointController {
 
         };
 
-        this._onDataChange(entry, this._data);
+        this._onDataChange(entry, mode === Mode.DEFAULT ? this._data : null);
 
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
-    render(this._container.getElement(), this._point.getElement(), position.AFTERBEGIN);
+    this._editForm.getElement()
+      .querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, (e) => {
+        if (mode === Mode.DEFAULT) {
+          e.preventDefault();
+          this._onDataChange(null, this._data);
+        } else {
+          this._onDataChange(null, null);
+        }
+
+        this._checkLengthTrip();
+      });
+
+    render(this._container.getElement(), currentView.getElement(), renderPosition);
   }
 }

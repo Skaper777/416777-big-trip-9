@@ -56,3 +56,8 @@ export const render = (container, element, place) => {
   }
 };
 
+export const Mode = {
+  ADDING: `adding`,
+  DEFAULT: `default`,
+};
+

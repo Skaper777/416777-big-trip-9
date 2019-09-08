@@ -1,10 +1,13 @@
 import {Sort} from '../components/sort';
 import {TripDays} from '../components/trip-days';
 import {Day} from '../components/day';
-import {render, position} from '../utils';
-import {EventMessage} from '../components/event-message';
+import {render, position, Mode} from '../utils';
 import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
+import {EventMessage} from '../components/event-message';
+import {types, offersList} from '../data';
+
+const PointControllerMode = Mode;
 
 export class TripController {
   constructor(container, events) {
@@ -15,7 +18,10 @@ export class TripController {
     this._day = new Day();
     this._eventsList = new EventsList();
 
+    this._creatingEvent = null;
+
     this._subscriptions = [];
+
     this._onChangeView = this._onChangeView.bind(this);
     this._onDataChange = this._onDataChange.bind(this);
   }
@@ -33,10 +39,50 @@ export class TripController {
     }
 
     this._events.forEach((mock) => this._renderEvent(mock));
+  }
 
-    if (!this._container.contains(this._tripDays.getElement())) {
-      this._renderEventMessage();
+  hide() {
+    this._container.classList.add(`trip-events--hidden`);
+  }
+
+  show() {
+    this._container.classList.remove(`trip-events--hidden`);
+  }
+
+  createEvent() {
+    if (this._creatingEvent) {
+      return;
     }
+
+    const defaultEvent = {
+      type: types[0],
+      destination: ``,
+      time: {
+        timeIn: new Date(),
+        timeOut: new Date(),
+        durationHours: ``,
+        durationMinutes: ``,
+        getDurationHours() {
+          let time = this.timeOut - this.timeIn;
+          this.durationHours = Math.floor(time / 3600000);
+          this.durationMinutes = Math.floor((time / 60000) - this.durationHours * 60);
+          return this.durationHours;
+        },
+
+        getDurationMinutes() {
+          return this.durationMinutes;
+        }
+      },
+      price: 0,
+      offers: offersList,
+      photo() {
+        return `http://picsum.photos/300/150?r=${Math.random()}`;
+      },
+      description: ``,
+    };
+
+    this._creatingEvent = new PointController(this._eventsList, defaultEvent, PointControllerMode.ADDING, this._onDataChange, this._onChangeView);
+
   }
 
   _renderEvents(events) {
@@ -47,7 +93,22 @@ export class TripController {
   }
 
   _onDataChange(newData, oldData) {
-    this._events[this._events.findIndex((it) => it === oldData)] = newData;
+    const index = this._events.findIndex((mock) => mock === oldData);
+
+    if (newData === null) {
+      if (oldData === null) {
+        this._creatingEvent = null;
+      } else {
+        this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
+      }
+    } else {
+      if (oldData === null) {
+        this._creatingEvent = null;
+        this._events = [newData, ...this._events];
+      } else {
+        this._events[index] = newData;
+      }
+    }
 
     this._renderEvents(this._events);
   }
@@ -56,13 +117,19 @@ export class TripController {
     this._subscriptions.forEach((it) => it());
   }
 
+  _renderEventMessage() {
+    const message = new EventMessage();
+    const mainContainer = document.querySelector(`.page-main`);
+
+    render(mainContainer, message.getElement(), position.AFTERBEGIN);
+  }
+
   _renderEvent(eventMock) {
-    const pointController = new PointController(this._eventsList, eventMock, this._onDataChange, this._onChangeView);
+    const pointController = new PointController(this._eventsList, eventMock, PointControllerMode.DEFAULT, this._onDataChange, this._onChangeView);
     this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 
   _onSortLabelClick(evt) {
-
     document.querySelector(`.trip-events__list`).innerHTML = ``;
 
     switch (evt.target.dataset.sortType) {
@@ -80,11 +147,5 @@ export class TripController {
         this._events.forEach((mock) => this._renderEvent(mock));
         break;
     }
-  }
-
-  _renderEventMessage() {
-    const message = new EventMessage();
-
-    render(this._container, message.getElement(), position.AFTERBEGIN);
   }
 }

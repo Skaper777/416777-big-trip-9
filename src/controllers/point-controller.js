@@ -157,8 +157,6 @@ export class PointController {
         document.addEventListener(`keydown`, onEscKeyDown);
       });
 
-
-
     this._editForm.getElement()
       .querySelector(`.event__reset-btn`)
       .addEventListener(`click`, () => {

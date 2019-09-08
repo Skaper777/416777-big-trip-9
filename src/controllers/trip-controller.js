@@ -5,6 +5,9 @@ import {render, position, Mode} from '../utils';
 import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 import {EventMessage} from '../components/event-message';
+// import {};
+
+const PointControllerMode = Mode;
 
 export class TripController {
   constructor(container, events) {
@@ -47,7 +50,7 @@ export class TripController {
   }
 
   createEvent() {
-    const PointControllerMode = Mode;
+
 
     if (this._creatingEvent) {
       return;
@@ -57,8 +60,8 @@ export class TripController {
       type: ``,
       destination: ``,
       time: {
-        timeIn: ``,
-        timeOut: ``,
+        timeIn: new Date(),
+        timeOut: new Date(),
         durationHours: ``,
         durationMinutes: ``,
         getDurationHours() {
@@ -95,6 +98,9 @@ export class TripController {
 
     if (newData === null) {
       this._events = [...this._events.slice(0, index), ...this._events.slice(index + 1)];
+    } else if (oldData === null) {
+      this._creatingEvent = null;
+      this._events = [newData, ...this._events];
     } else {
       this._events[index] = newData;
     }
@@ -114,7 +120,7 @@ export class TripController {
   }
 
   _renderEvent(eventMock) {
-    const pointController = new PointController(this._eventsList, eventMock, this._onDataChange, this._onChangeView);
+    const pointController = new PointController(this._eventsList, eventMock, PointControllerMode.DEFAULT, this._onDataChange, this._onChangeView);
     this._subscriptions.push(pointController.setDefaultView.bind(pointController));
   }
 

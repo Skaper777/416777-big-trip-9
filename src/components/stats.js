@@ -1,4 +1,6 @@
 import {AbstractComponent} from './abstract';
+import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export class Stats extends AbstractComponent {
   constructor() {

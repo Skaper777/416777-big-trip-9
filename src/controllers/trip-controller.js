@@ -55,7 +55,7 @@ export class TripController {
     }
 
     const defaultEvent = {
-      type: types[0],
+      type: types[0].name,
       destination: ``,
       time: {
         timeIn: new Date(),

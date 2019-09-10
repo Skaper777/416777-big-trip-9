@@ -14,7 +14,7 @@ export class EditEvent extends AbstractComponent {
   }
 
   _getTitle() {
-    switch (this._type) {
+    switch (this._type.name) {
       case `taxi`:
         return `Taxi to`;
 
@@ -57,7 +57,7 @@ export class EditEvent extends AbstractComponent {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._type}.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${this._type.name}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 

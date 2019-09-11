@@ -85,4 +85,7 @@ if (points.length > 0) {
   renderTripInfo();
   renderTotalPrice();
 }
-console.log(events.map((item) => item.time.durationHours));
+
+const stats = new Stats(events);
+
+stats.init();

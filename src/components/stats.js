@@ -1,39 +1,68 @@
 import {AbstractComponent} from './abstract';
-import {events} from '../components/points';
+import {types} from '../data';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 export class Stats extends AbstractComponent {
-  constructor() {
+  constructor(events) {
     super();
+    this._events = events;
+  }
+
+  init() {
+    const moneyCtx = document.querySelector(`.statistics__chart--money`);
+    // const transportCtx = document.querySelector(`.statistics__chart--transport`);
+    // const timeCtx = document.querySelector(`.statistics__chart--time`);
+
+    this._moneyChart = new Chart(moneyCtx, this._getConfig(this._getMoneyLabels, this._getMoneyData, `MONEY`));
   }
 
   _getMoneyLabels() {
-    return events.map((item) => item.type);
+    let ar = this._events.map((item) => item.type.name);
+    return new Set(ar);
   }
 
-  _getTransportLabels() {
-    return events.map((item) => {
-      if (item.type.type === `transport`) {
-        return item.type.type;
-      } else {
-        return null;
-      }
+  _makeTotalPrice(arr, label) {
+    let ar = arr.filter((item) => item.type.name === label);
+    let price = 0;
+
+    ar.forEach((item) => {
+      price += item.price;
     });
+
+    return price;
+  }
+
+  _getMoneyData() {
+    let ar = [];
+
+    for (let i = 0; i < types.length; i++) {
+      ar.push(this._makeTotalPrice(this._events, types[i].name));
+    }
+
+    return ar.filter((item) => item > 0);
+  }
+
+  /*
+ _getTransportLabels() {
+    let ar = events.filter((item) => item.type.type === `transport`);
+
+    return ar.map((item) => item.type);
   }
 
   _getTimeLabels() {
     return events.map((item) => item.time.durationHours);
   }
+ */
 
-  _getChartConfig(label, title) {
+  _getConfig(labelList, dataList, title) {
     return {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
-        labels: label,
+        labels: labelList,
         datasets: [{
-          data: ``,
+          data: dataList,
           backgroundColor: `white`,
           borderColor: `grey`,
           borderWidth: 0,
@@ -80,14 +109,6 @@ export class Stats extends AbstractComponent {
         },
       }
     };
-  }
-
-  init() {
-    const moneyCtx = document.querySelector(`.statistics__chart--money`);
-    const transportCtx = document.querySelector(`.statistics__chart--transport`);
-    const timeCtx = document.querySelector(`.statistics__chart--time`);
-
-    // const moneyChart = new Chart(moneyCtx, );
   }
 
   getTemplate() {

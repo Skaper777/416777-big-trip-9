@@ -129,19 +129,3 @@ export const getMenu = () => ({
   }
   ]
 });
-
-export const getFilters = () => ({
-  list: [{
-    name: `Everything`,
-    checked: true
-  },
-  {
-    name: `Future`,
-    checked: false
-  },
-  {
-    name: `Past`,
-    checked: false
-  }
-  ]
-});

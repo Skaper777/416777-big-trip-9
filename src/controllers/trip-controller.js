@@ -34,8 +34,10 @@ export class TripController {
 
     const sortBtns = document.querySelectorAll(`.trip-sort__btn`);
 
+
     for (let i = 0; i < sortBtns.length; i++) {
       sortBtns[i].addEventListener(`click`, (evt) => this._onSortLabelClick(evt));
+
     }
 
     this._events.forEach((mock) => this._renderEvent(mock));
@@ -82,7 +84,6 @@ export class TripController {
     };
 
     this._creatingEvent = new PointController(this._eventsList, defaultEvent, PointControllerMode.ADDING, this._onDataChange, this._onChangeView);
-
   }
 
   _renderEvents(events) {

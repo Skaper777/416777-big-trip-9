@@ -14,12 +14,15 @@ export class Stats extends AbstractComponent {
     // const transportCtx = document.querySelector(`.statistics__chart--transport`);
     // const timeCtx = document.querySelector(`.statistics__chart--time`);
 
-    this._moneyChart = new Chart(moneyCtx, this._getConfig(this._getMoneyLabels, this._getMoneyData, `MONEY`));
+    this._moneyChart = new Chart(moneyCtx, this._getConfig(this._getMoneyLabels(), this._getMoneyData(), `MONEY`));
   }
 
   _getMoneyLabels() {
     let ar = this._events.map((item) => item.type.name);
-    return new Set(ar);
+
+    let newAr = new Set(ar);
+
+    return [...newAr];
   }
 
   _makeTotalPrice(arr, label) {
@@ -40,6 +43,7 @@ export class Stats extends AbstractComponent {
       ar.push(this._makeTotalPrice(this._events, types[i].name));
     }
 
+    console.log(ar);
     return ar.filter((item) => item > 0);
   }
 

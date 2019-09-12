@@ -12,7 +12,7 @@ const infoContainer = document.querySelector(`.trip-main__trip-info`);
 const menuContainer = document.querySelector(`.trip-main__trip-controls`);
 const tripContainer = document.querySelector(`.trip-events`);
 const priceContainer = document.querySelector(`.trip-info__cost-value`);
-
+const mainContainer = document.querySelectorAll(`.page-body__container`)[1];
 
 const renderTripInfo = () => {
   const tripInfo = new TripInfo();
@@ -27,12 +27,20 @@ const renderTotalPrice = () => {
   render(priceContainer, price.getElement(), position.AFTERBEGIN);
 };
 
+const stats = new Stats();
+
+const renderStats = () => {
+  render(mainContainer, stats.getElement(), position.BEFOREEND);
+};
+
+renderStats();
+
 const renderMenu = (mock) => {
   const menu = new Menu(mock);
-  const stats = new Stats();
+
 
   render(menuContainer, menu.getElement(), position.AFTERBEGIN);
-  render(tripContainer, stats.getElement(), position.BEFOREEND);
+
 
   menu.getElement().addEventListener(`click`, (e) => {
     e.preventDefault();
@@ -66,8 +74,8 @@ const addEvent = () => {
 
 addBtn.addEventListener(`click`, addEvent);
 
-const renderFilters = (mock) => {
-  const filters = new Filters(mock);
+const renderFilters = () => {
+  const filters = new Filters();
 
   render(menuContainer, filters.getElement(), position.BEFOREEND);
 };
@@ -77,7 +85,7 @@ const tripController = new TripController(tripContainer, events);
 tripController.init();
 
 renderMenu(getMenu());
-renderFilters(getFilters());
+renderFilters();
 
 const points = document.querySelectorAll(`.event`);
 
@@ -86,6 +94,14 @@ if (points.length > 0) {
   renderTotalPrice();
 }
 
-const stats = new Stats(events);
+const statsGraph = new Stats(events);
 
-stats.init();
+statsGraph.init();
+
+let ar = events.map((item) => item.type.name);
+
+    let newAr = new Set(ar);
+
+
+
+    console.log([ar]);

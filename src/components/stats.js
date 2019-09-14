@@ -11,62 +11,65 @@ export class Stats extends AbstractComponent {
 
   init() {
     const moneyCtx = document.querySelector(`.statistics__chart--money`);
-    // const transportCtx = document.querySelector(`.statistics__chart--transport`);
-    // const timeCtx = document.querySelector(`.statistics__chart--time`);
+    const transportCtx = document.querySelector(`.statistics__chart--transport`);
+    const timeCtx = document.querySelector(`.statistics__chart--time`);
 
-    this._moneyChart = new Chart(moneyCtx, this._getConfig(this._getMoneyLabels(), this._getMoneyData(), `MONEY`));
-  }
-
-  _getMoneyLabels() {
-    let ar = this._events.map((item) => item.type.name);
-
-    let newAr = new Set(ar);
-
-    return [...newAr];
-  }
-
-  _makeTotalPrice(arr, label) {
-    let ar = arr.filter((item) => item.type.name === label);
-    let price = 0;
-
-    ar.forEach((item) => {
-      price += item.price;
-    });
-
-    return price;
+    this._moneyChart = new Chart(moneyCtx, this._getConfig(this._getMoneyData(), `MONEY`, (value) => `€` + value));
+    this._trasnportChart = new Chart(transportCtx, this._getConfig(this._getTransportData(), `TRANSPORT`, (value) => value + `x`));
+    this._timeChart = new Chart(timeCtx, this._getConfig(this._getTimeData(), `TIME`, (value) => value + `H`));
   }
 
   _getMoneyData() {
-    let ar = [];
+    const data = this._events.reduce((obj, {type, price}) => {
+      const name = type.name;
+      const prevProp = obj[name] || 0;
+      obj[name] = prevProp + price;
 
-    for (let i = 0; i < types.length; i++) {
-      ar.push(this._makeTotalPrice(this._events, types[i].name));
-    }
+      return obj;
+    }, {});
 
-    console.log(ar);
-    return ar.filter((item) => item > 0);
+    return data;
   }
 
-  /*
- _getTransportLabels() {
-    let ar = events.filter((item) => item.type.type === `transport`);
+  _getTransportData() {
+    const data = this._events.reduce((obj, {type}) => {
+      if (type.type === `transport`) {
+        const transport = type.name;
+        const prevProp = obj[transport] || 0;
+        obj[transport] = prevProp + 1;
 
-    return ar.map((item) => item.type);
+        return obj;
+      }
+
+      return obj;
+    }, {});
+
+    return data;
   }
 
-  _getTimeLabels() {
-    return events.map((item) => item.time.durationHours);
-  }
- */
+  _getTimeData() {
+    const data = this._events.reduce((obj, {destination, time}) => {
+      const dest = destination;
+      const hours = time.durationHours;
 
-  _getConfig(labelList, dataList, title) {
+      obj[dest] = hours;
+
+      return obj;
+    }, {});
+
+    return data;
+  }
+
+  _getConfig(data, title, formatIcon) {
+    const keys = Object.keys(data);
+
     return {
       plugins: [ChartDataLabels],
       type: `horizontalBar`,
       data: {
-        labels: labelList,
+        labels: keys,
         datasets: [{
-          data: dataList,
+          data: keys.map((key) => data[key]),
           backgroundColor: `white`,
           borderColor: `grey`,
           borderWidth: 0,
@@ -76,6 +79,7 @@ export class Stats extends AbstractComponent {
       options: {
         plugins: {
           datalabels: {
+            formatter: formatIcon,
             font: {
               size: 15
             },

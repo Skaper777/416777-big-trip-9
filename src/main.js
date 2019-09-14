@@ -104,4 +104,4 @@ let ar = events.map((item) => item.type.name);
 
 
 
-    console.log([ar]);
+    console.log(events[0]);

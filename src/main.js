@@ -2,7 +2,7 @@ import {TripInfo} from './components/trip-info';
 import {Menu} from './components/menu';
 import {Filters} from './components/filters';
 import {TotalPrice} from './components/total-price';
-import {getMenu, getFilters} from './data';
+import {getMenu} from './data';
 import {render, position} from './utils';
 import {events} from './components/points';
 import {TripController} from './controllers/trip-controller';

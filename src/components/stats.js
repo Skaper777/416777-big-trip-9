@@ -1,5 +1,4 @@
 import {AbstractComponent} from './abstract';
-import {types} from '../data';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 

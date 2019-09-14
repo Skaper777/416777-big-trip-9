@@ -34,10 +34,8 @@ export class TripController {
 
     const sortBtns = document.querySelectorAll(`.trip-sort__btn`);
 
-
     for (let i = 0; i < sortBtns.length; i++) {
       sortBtns[i].addEventListener(`click`, (evt) => this._onSortLabelClick(evt));
-
     }
 
     this._events.forEach((mock) => this._renderEvent(mock));
@@ -146,6 +144,35 @@ export class TripController {
 
       case `event`:
         this._events.forEach((mock) => this._renderEvent(mock));
+        break;
+    }
+  }
+
+  filterEvents() {
+    const filterBtns = document.querySelectorAll(`.trip-filters__filter-label`);
+
+    for (let i = 0; i < filterBtns.length; i++) {
+      filterBtns[i].addEventListener(`click`, (evt) => this._onFilterClick(evt));
+    }
+  }
+
+  _onFilterClick(evt) {
+    document.querySelector(`.trip-events__list`).innerHTML = ``;
+    const now = Date.now();
+
+    switch (evt.target.textContent) {
+      case `Everything`:
+        this._events.forEach((mock) => this._renderEvent(mock));
+        break;
+
+      case `Future`:
+        const filteredByFuture = this._events.slice().filter((item) => item.time.timeIn > now);
+        filteredByFuture.forEach((mock) => this._renderEvent(mock));
+        break;
+
+      case `Past`:
+        const filteredByPast = this._events.slice().filter((item) => now > item.time.timeIn);
+        filteredByPast.forEach((mock) => this._renderEvent(mock));
         break;
     }
   }

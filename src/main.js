@@ -98,10 +98,4 @@ const statsGraph = new Stats(events);
 
 statsGraph.init();
 
-let ar = events.map((item) => item.type.name);
-
-    let newAr = new Set(ar);
-
-
-
-    console.log(events[0]);
+tripController.filterEvents();

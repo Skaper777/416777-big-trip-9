@@ -6,6 +6,7 @@ import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 import {EventMessage} from '../components/event-message';
 import {types, offersList} from '../data';
+import moment from 'moment';
 
 const PointControllerMode = Mode;
 
@@ -82,7 +83,6 @@ export class TripController {
     };
 
     this._creatingEvent = new PointController(this._eventsList, defaultEvent, PointControllerMode.ADDING, this._onDataChange, this._onChangeView);
-
   }
 
   _renderEvents(events) {
@@ -134,7 +134,7 @@ export class TripController {
 
     switch (evt.target.dataset.sortType) {
       case `time`:
-        const sortedByTime = this._events.slice().sort((a, b) => (a.time.timeOut - a.time.timeIn) - (b.time.timeOut - b.time.timeIn));
+        const sortedByTime = this._events.slice().sort((a, b) => (moment(a.time.timeOut).format(`x`)) - (moment(a.time.timeIn).format(`x`)) - (moment(b.time.timeOut).format(`x`)) - (moment(b.time.timeIn).format(`x`)));
         sortedByTime.forEach((mock) => this._renderEvent(mock));
         break;
 
@@ -145,6 +145,35 @@ export class TripController {
 
       case `event`:
         this._events.forEach((mock) => this._renderEvent(mock));
+        break;
+    }
+  }
+
+  filterEvents() {
+    const filterBtns = document.querySelectorAll(`.trip-filters__filter-label`);
+
+    for (let i = 0; i < filterBtns.length; i++) {
+      filterBtns[i].addEventListener(`click`, (evt) => this._onFilterClick(evt));
+    }
+  }
+
+  _onFilterClick(evt) {
+    document.querySelector(`.trip-events__list`).innerHTML = ``;
+    const now = Date.now();
+
+    switch (evt.target.textContent) {
+      case `Everything`:
+        this._events.forEach((mock) => this._renderEvent(mock));
+        break;
+
+      case `Future`:
+        const filteredByFuture = this._events.slice().filter((item) => moment(item.time.timeIn).format(`x`) > now);
+        filteredByFuture.forEach((mock) => this._renderEvent(mock));
+        break;
+
+      case `Past`:
+        const filteredByPast = this._events.slice().filter((item) => now > moment(item.time.timeIn).format(`x`));
+        filteredByPast.forEach((mock) => this._renderEvent(mock));
         break;
     }
   }

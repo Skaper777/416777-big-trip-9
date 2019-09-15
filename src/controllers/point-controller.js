@@ -24,14 +24,15 @@ export class PointController {
     const checkboxes = this._editForm.getElement().querySelectorAll(`.event__type-input`);
 
     for (let i = 0; i < checkboxes.length; i++) {
-      if (this._editForm._type === checkboxes[i].value) {
+      if (this._editForm._type.name === checkboxes[i].value) {
         checkboxes[i].checked = true;
       }
 
       checkboxes[i].addEventListener(`click`, (evt) => {
         if (evt.target === checkboxes[i]) {
-          this._editForm._type = checkboxes[i].value;
-          this._editForm.getElement().querySelector(`.event__type-icon`).src = `img/icons/${this._editForm._type}.png`;
+          checkboxes[i].checked = true;
+          this._editForm._type.name = checkboxes[i].value;
+          this._editForm.getElement().querySelector(`.event__type-icon`).src = `img/icons/${this._editForm._type.name}.png`;
           this._editForm.getElement().querySelector(`.event__type-output`).textContent = `${this._editForm._getTitle()}`;
         }
       });
@@ -119,7 +120,9 @@ export class PointController {
         const offersDom = Array.from(this._editForm.getElement().querySelectorAll(`.event__offer-selector`));
 
         const entry = {
-          type: formData.get(`event-type`),
+          type: {
+            name: formData.get(`event-type`)
+          },
           destination: formData.get(`event-destination`),
           time: {
             timeIn: formData.get(`event-start-time`),

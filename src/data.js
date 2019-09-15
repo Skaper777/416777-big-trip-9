@@ -3,16 +3,46 @@ import {
 } from './utils';
 
 export const types = [
-  `taxi`,
-  `bus`,
-  `train`,
-  `ship`,
-  `transport`,
-  `drive`,
-  `flight`,
-  `check-in`,
-  `sightseeing`,
-  `restaurant`
+  {
+    name: `taxi`,
+    type: `transport`
+  },
+  {
+    name: `bus`,
+    type: `transport`
+  },
+  {
+    name: `train`,
+    type: `transport`
+  },
+  {
+    name: `ship`,
+    type: `transport`
+  },
+  {
+    name: `transport`,
+    type: `transport`
+  },
+  {
+    name: `drive`,
+    type: `transport`
+  },
+  {
+    name: `flight`,
+    type: `transport`
+  },
+  {
+    name: `check-in`,
+    type: `place`
+  },
+  {
+    name: `sightseeing`,
+    type: `place`
+  },
+  {
+    name: `restaurant`,
+    type: `place`
+  }
 ];
 
 export const offersList = [
@@ -96,22 +126,6 @@ export const getMenu = () => ({
   {
     name: `Stats`,
     active: false
-  }
-  ]
-});
-
-export const getFilters = () => ({
-  list: [{
-    name: `Everything`,
-    checked: true
-  },
-  {
-    name: `Future`,
-    checked: false
-  },
-  {
-    name: `Past`,
-    checked: false
   }
   ]
 });

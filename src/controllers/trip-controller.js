@@ -6,6 +6,7 @@ import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 import {EventMessage} from '../components/event-message';
 import {types, offersList} from '../data';
+import moment from 'moment';
 
 const PointControllerMode = Mode;
 
@@ -133,7 +134,7 @@ export class TripController {
 
     switch (evt.target.dataset.sortType) {
       case `time`:
-        const sortedByTime = this._events.slice().sort((a, b) => (a.time.timeOut - a.time.timeIn) - (b.time.timeOut - b.time.timeIn));
+        const sortedByTime = this._events.slice().sort((a, b) => (moment(a.time.timeOut).format(`x`)) - (moment(a.time.timeIn).format(`x`)) - (moment(b.time.timeOut).format(`x`)) - (moment(b.time.timeIn).format(`x`)));
         sortedByTime.forEach((mock) => this._renderEvent(mock));
         break;
 
@@ -166,12 +167,12 @@ export class TripController {
         break;
 
       case `Future`:
-        const filteredByFuture = this._events.slice().filter((item) => item.time.timeIn > now);
+        const filteredByFuture = this._events.slice().filter((item) => moment(item.time.timeIn).format(`x`) > now);
         filteredByFuture.forEach((mock) => this._renderEvent(mock));
         break;
 
       case `Past`:
-        const filteredByPast = this._events.slice().filter((item) => now > item.time.timeIn);
+        const filteredByPast = this._events.slice().filter((item) => now > moment(item.time.timeIn).format(`x`));
         filteredByPast.forEach((mock) => this._renderEvent(mock));
         break;
     }

@@ -43,7 +43,7 @@ export const types = [
     name: `restaurant`,
     type: `place`
   }
-]
+];
 
 export const offersList = [
   {

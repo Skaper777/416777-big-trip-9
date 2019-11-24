@@ -194,11 +194,11 @@ export class EditEvent extends AbstractComponent {
 
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            <img class="event__photo" src="${this._photo()}" alt="Event photo">
-            <img class="event__photo" src="${this._photo()}" alt="Event photo">
-            <img class="event__photo" src="${this._photo()}" alt="Event photo">
-            <img class="event__photo" src="${this._photo()}" alt="Event photo">
-            <img class="event__photo" src="${this._photo()}" alt="Event photo">
+            <img class="event__photo" src="${this._photo}" alt="Event photo">
+            <img class="event__photo" src="${this._photo}" alt="Event photo">
+            <img class="event__photo" src="${this._photo}" alt="Event photo">
+            <img class="event__photo" src="${this._photo}" alt="Event photo">
+            <img class="event__photo" src="${this._photo}" alt="Event photo">
           </div>
         </div>
       </section>

@@ -5,7 +5,7 @@ import {render, position, Mode} from '../utils';
 import {EventsList} from '../components/events-list';
 import {PointController} from './point-controller';
 import {EventMessage} from '../components/event-message';
-import {types, offersList} from '../data';
+import {types, offersList, getPhoto} from '../data';
 import moment from 'moment';
 
 const PointControllerMode = Mode;
@@ -76,9 +76,7 @@ export class TripController {
       },
       price: 0,
       offers: offersList,
-      photo() {
-        return `http://picsum.photos/300/150?r=${Math.random()}`;
-      },
+      photo: getPhoto(),
       description: ``,
     };
 
